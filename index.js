@@ -377,7 +377,7 @@ function CreateNew() {
 }
 
 function getSao(gioiTinh, tuoi) {
-    if (tuoi < 10) {
+    if (tuoi < 10 || tuoi > 99) {
         return ""
     }
     if (gioiTinh === 'Nam') {
@@ -424,7 +424,7 @@ function getSao(gioiTinh, tuoi) {
 }
 
 function getHan(gioiTinh, tuoi) {
-    if (tuoi < 10) {
+    if (tuoi < 10 || tuoi > 97) {
         return ""
     }
     if (gioiTinh === 'Nam') {
