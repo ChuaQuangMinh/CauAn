@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Danh Sách Xem Sao Hạn</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+  <!-- Bootstrap Icons CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <iframe id="pdfViewer" style="display: none;"></iframe>
+
+  <div id="loadingOverlay">
+    <div id="loadingSpinner" class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Chùa Quang Minh</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Xem Sao Hạn</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="ds.html">Danh Sách</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container ">
+    <div class="card-header text-center">
+      <h4>DANH SÁCH XEM SAO HẠN</h4>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Tìm kiếm" name="tim_kiem">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-sm btn-success mb-1 print-selected"><i class="bi bi-printer"></i> In tất cả đã
+            chọn</button>
+        </div>
+        <div class="col-12 d-none">
+          <div class="row">
+            <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+              <div class="input-group mb-3">
+                <select class="form-select" name="dc_1" id="dc_1">
+                </select>
+              </div>
+            </div>
+            <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+              <div class="input-group mb-3">
+                <select class="form-select" name="dc_2" id="dc_2">
+                </select>
+              </div>
+            </div>
+            <div class="col-xl-2 col-lg-4 col-md-4 col-12">
+              <div class="input-group mb-3">
+                <select class="form-select" name="dc_3" id="dc_3">
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="table-success">
+            <tr>
+              <th scope="col">Thông tin</th>
+              <th scope="col" style="width: 1%;">Chọn(<span class="selected-count">0</span>)</th>
+              <th scope="col" style="width: 8%;">Chức năng</th>
+            </tr>
+          </thead>
+          <tbody id="TBody">
+            <tr id="TRow" class="d-none">
+              <td>
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="mb-0">
+                      <p class="ma_so"></p>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-0">
+                      <p class="dai_dien"></p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-0">
+                      <p class="dia_chi"></p>
+                    </div>
+                  </div>
+                  <div class="col-md-2 d-none">
+                    <div class="mb-0">
+                      <p class="so_dien_thoai"></p>
+                    </div>
+                  </div>
+                  <!-- <div class="col-md-2">
+                    <div class="mb-0">
+                      <p class="trang_thai"></p>
+                    </div>
+                  </div> -->
+                </div>
+              </td>
+              <td class="custom-td">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                </div>
+              </td>
+              <td class="custom-td">
+                <a href="" class="btn btn-sm btn-primary mb-1"><i class="bi bi-pencil"></i></a>
+                <button class="btn btn-sm btn-success print-button mb-1" data-ma-so="your_ma_so_here"><i
+                    class="bi bi-printer"></i></button>
+                <!-- <button class="btn btn-sm btn-danger mb-1"><i class="bi bi-trash"></i></button> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+  <!-- Other scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.10.111/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.15/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="index.js"></script>
+  <script>
+    $(document).ready(function () {
+      // // Lấy đối tượng td cần thêm sự kiện click
+      // var td = document.querySelector('.clickable');
+
+      // // Thêm sự kiện click vào td
+      // td.addEventListener('click', function () {
+      //   // Thực hiện hành động khi td được click
+      //   alert('Bạn đã click vào TD này.');
+      // });
+      $(".print-selected").hide();
+      showLoadingOverlay();
+      $.getJSON(AppsScriptLink, function (data) {
+        data.shift();
+        $.each(data, function (key, value) {
+          var $row = $("#TRow").clone().removeClass('d-none'); // Clone the hidden row
+          $row.find(".ma_so").text(value[0]);
+          $row.find(".dai_dien").text(value[1]);
+          $row.find(".dia_chi").text(value[2]);
+          $row.find(".so_dien_thoai").text(value[6]);
+          var trangThai = value[7];
+          $row.find(".trang_thai").text(trangThai);
+          if (trangThai === "Chưa in") {
+            $row.find(".trang_thai").addClass("chua_in");
+          } else if (trangThai === "Đã in") {
+            $row.find(".trang_thai").addClass("da_in");
+          }
+          var maSoLink = "index.html?ma_so=" + value[0];
+          $row.find("a.btn-primary").attr("href", maSoLink);
+          var $printButton = $row.find("button.print-button");
+          $printButton.attr("data-ma-so", value[0]); // Set the data-ma-so attribute
+          $printButton.on("click", function () {
+            var maSo = $(this).data('ma-so'); // Lấy giá trị data-ma-so
+            showLoadingOverlay();
+            generatePDF([maSo]); // Gọi hàm generatePDF với mã số
+          });
+          $("#TBody").append($row); // Append the row to the table body
+        });
+        hideLoadingOverlay();
+      });
+      // Lấy giá trị của ô tìm kiếm khi nó thay đổi
+      $("input[name='tim_kiem']").on("keyup", function () {
+        var searchText = $(this).val().toLowerCase();
+
+        // Lặp qua từng dòng dữ liệu
+        $("#TBody tr").each(function () {
+          var rowData = $(this).text().toLowerCase();
+
+          // Lấy nội dung của các phần tử có class 'd-none' và bao gồm vào biến rowData
+          $(this).find('.d-none').each(function () {
+            rowData += $(this).text().toLowerCase();
+          });
+
+          // Tìm kiếm trong dữ liệu của từng dòng
+          if (rowData.indexOf(searchText) === -1) {
+            $(this).hide();
+          } else {
+            $(this).show();
+          }
+        });
+      });
+
+      // Mảng lưu trữ các hàng đã chọn
+      var selectedRows = [];
+
+      $("#TBody").on("change", ".form-check-input", function () {
+        var maSo = $(this).closest("tr").find(".ma_so").text();
+
+        // Kiểm tra xem nút chọn đã được chọn hay bỏ chọn
+        if ($(this).prop("checked")) {
+          selectedRows.push(maSo);
+        } else {
+          var index = selectedRows.indexOf(maSo);
+          if (index !== -1) {
+            selectedRows.splice(index, 1);
+          }
+        }
+
+        // Cập nhật số lượng đã chọn và hiển thị
+        var selectedCount = selectedRows.length;
+        $(".selected-count").text(selectedCount);
+
+        // Ẩn/hiện nút "In tất cả đã chọn" dựa trên số lượng đã chọn
+        if (selectedCount > 0) {
+          $(".print-selected").show();
+        } else {
+          $(".print-selected").hide();
+        }
+      });
+
+      $(".print-selected").on("click", function () {
+        if (selectedRows.length > 0) {
+          showLoadingOverlay();
+          generatePDF(selectedRows); // Gọi hàm generatePDF với danh sách mã số đã chọn
+        } else {
+          alert("Vui lòng chọn ít nhất một hàng để in.");
+        }
+      });
+    });
+
+  </script>
+
+</body>
+
+</html>
