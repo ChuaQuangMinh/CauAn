@@ -378,24 +378,24 @@ function CreateNew() {
 
 function getSao(gioiTinh, tuoi) {
     if (gioiTinh === 'Nam') {
-        if ([1, 10, 19, 28, 37, 46, 55, 64, 73, 82, 91].includes(tuoi)) {
+        if ([10, 19, 28, 37, 46, 55, 64, 73, 82, 91].includes(tuoi)) {
             return "La Hầu";
-        } else if ([2, 11, 20, 29, 38, 47, 56, 65, 74, 83, 92].includes(tuoi)) {
-            return "Thổ Tinh";
-        } else if ([3, 12, 21, 30, 39, 48, 57, 66, 75, 84, 93].includes(tuoi)) {
+        } else if ([11, 20, 29, 38, 47, 56, 65, 74, 83, 92].includes(tuoi)) {
+            return "Thổ Tú";
+        } else if ([12, 21, 30, 39, 48, 57, 66, 75, 84, 93].includes(tuoi)) {
             return "Thuỷ Diệu";
-        } else if ([4, 13, 22, 31, 40, 49, 58, 67, 76, 85, 94].includes(tuoi)) {
+        } else if ([13, 22, 31, 40, 49, 58, 67, 76, 85, 94].includes(tuoi)) {
             return "Thái Bạch";
-        } else if ([5, 14, 23, 32, 41, 50, 59, 68, 77, 86, 95].includes(tuoi)) {
+        } else if ([14, 23, 32, 41, 50, 59, 68, 77, 86, 95].includes(tuoi)) {
             return "Thái Dương";
-        } else if ([6, 15, 24, 33, 42, 51, 60, 69, 78, 87, 96].includes(tuoi)) {
+        } else if ([15, 24, 33, 42, 51, 60, 69, 78, 87, 96].includes(tuoi)) {
             return "Văn Hớn";
-        } else if ([7, 16, 25, 34, 43, 52, 61, 70, 79, 88, 97].includes(tuoi)) {
+        } else if ([16, 25, 34, 43, 52, 61, 70, 79, 88, 97].includes(tuoi)) {
             return "Kế Đô";
-        } else if ([8, 17, 26, 35, 44, 53, 62, 71, 80, 89, 98].includes(tuoi)) {
+        } else if ([17, 26, 35, 44, 53, 62, 71, 80, 89, 98].includes(tuoi)) {
             return "Thái Âm";
-        } else if ([9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99].includes(tuoi)) {
-            return "Mộc Tinh";
+        } else if ([18, 27, 36, 45, 54, 63, 72, 81, 90, 99].includes(tuoi)) {
+            return "Mộc Đức";
         }
     } else if (gioiTinh === 'Nữ') {
         if ([1, 10, 19, 28, 37, 46, 55, 64, 73, 82, 91].includes(tuoi)) {
