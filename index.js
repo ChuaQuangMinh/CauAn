@@ -67,13 +67,14 @@ $(document).ready(function () {
     }
 
     // Dữ liệu cho các select, bạn có thể thay thế bằng dữ liệu thực tế từ nguồn dữ liệu của bạn
-    var dc1Data = ["Cần Đước", "Cần Giuộc", "Bình Chánh", "TP.HCM", "Tiền Giang", "Khác"];
+    var dc1Data = ["Cần Đước", "Cần Giuộc", "Bình Chánh", "TP.HCM", "Gò Công", "Tiền Giang", "Khác"];
     var dc2Data = {
         "Cần Đước": ["TT.Cần Đước", "Xã Tân Lân", "Xã Tân Ân", "Xã Tân Chánh", "Xã Mỹ Lệ", "Xã Phước Tuy", "Xã Phước Đông", "Xã Phước Vân", "Xã Tân Trạch", "Xã Long Hựu Đông", "Xã Long Hựu Tây", "Xã Long Sơn", "Xã Long Cang", "Xã Long Hòa", "Xã Long Định", "Xã Long Khê", "Xã Long Trạch"],
         "Cần Giuộc": ["none"],
         "Bình Chánh": ["none"],
+        "TP.HCM": ["none"],
+        "Gò Công": ["none"],
         "Tiền Giang": ["none"],
-        "TP.HCM": ["none"], // Không có tùy chọn cho TPHCM
         "Khác": ["none"]
     };
     var dc3Data = {
