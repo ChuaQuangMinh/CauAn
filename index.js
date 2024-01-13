@@ -467,6 +467,20 @@ function getHan(gioiTinh, tuoi) {
     }
 }
 
+function getNangNhe(tuoi, gioiTinh, sao, han) {
+    if (tuoi < 10 || tuoi > 99) {
+        return ""
+    }
+    return "check"
+}
+
+function getKyThang(tuoi, sao, han) {
+    if (tuoi < 10 || tuoi > 99) {
+        return ""
+    }
+    return "check"
+}
+
 function checkTamTai(currentYear, yearOfBirth) {
     if ((currentYear - yearOfBirth + 1) < 10){
         return""
@@ -789,8 +803,11 @@ function generatePDF(listMaSo) {
                         let han = getHan(gioiTinh, tuoi);//Han
                         rowData.push(han);
 
-                        rowData.push("");//Nặng-nhẹ
-                        rowData.push("");//Kỵ Tháng
+                        let nangNhe = getNangNhe(tuoi, gioiTinh, sao, han)
+                        rowData.push(nangNhe);//Nặng-nhẹ
+
+                        let kyThang = getKyThang(tuoi, sao, han)
+                        rowData.push(kyThang);//Kỵ Tháng
 
                         let tamTai = checkTamTai(year, value[10]);//Tam Tai
                         rowData.push(tamTai);
