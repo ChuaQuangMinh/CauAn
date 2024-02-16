@@ -438,7 +438,7 @@ function getHan(gioiTinh, tuoi) {
         } else if ([13, 22, 31, 39, 40, 48, 57, 66, 75, 84, 93].includes(tuoi)) {
             return "Thiên Tinh";
         } else if ([14, 23, 32, 41, 49, 50, 58, 67, 76, 85, 94].includes(tuoi)) {
-            return "Tán Tận";
+            return "Toán Tận";
         } else if ([15, 24, 33, 42, 51, 59, 60, 68, 77, 86, 95].includes(tuoi)) {
             return "Thiên La";
         } else if ([16, 25, 34, 43, 52, 61, 60, 70, 78, 87, 96].includes(tuoi)) {
@@ -448,7 +448,7 @@ function getHan(gioiTinh, tuoi) {
         }
     } else if (gioiTinh === 'Nữ') {
         if        ([10, 18, 27, 36, 45, 54, 63, 72, 81, 89, 90].includes(tuoi)) {
-            return "Tán Tận";
+            return "Toán Tận";
         } else if ([11, 19, 20, 28, 37, 46, 55, 64, 73, 82, 91].includes(tuoi)) {
             return "Thiên Tinh";
         } else if ([12, 21, 29, 30, 38, 47, 56, 65, 74, 83, 92].includes(tuoi)) {
@@ -468,20 +468,48 @@ function getHan(gioiTinh, tuoi) {
 }
 
 function getNangNhe(tuoi, gioiTinh, sao, han) {
-    if (tuoi < 10 || tuoi > 99) {
-        return ""
+    if (isTuoiHopLe(tuoi)) {
+        if (sao === 'La Hầu' && gioiTinh === 'Nam') {
+            return "Nặng";
+        }
+        if (sao === 'Kế Đô' && gioiTinh === 'Nữ') {
+            return "Nặng";
+        }
+        if (sao === 'Thái Bạch') {
+            return "Nặng";
+        }
+        return "Nhẹ";
     }
-    return "check"
+    return "";
 }
 
-function getKyThang(tuoi, sao, han) {
-    if (tuoi < 10 || tuoi > 99) {
-        return ""
+function getKyThang(tuoi, gioiTinh, sao, han) {
+    if (isTuoiHopLe(tuoi)) {
+        if (sao === 'La Hầu' && gioiTinh === 'Nam') {
+            return "1 - 7";
+        }
+        if (sao === 'Kế Đô' && gioiTinh === 'Nữ') {
+            return "3 - 9";
+        }
+        if (sao === 'Thái Bạch') {
+            return "5";
+        }
+        if (sao === 'Thổ Tú' || sao === 'Thuỷ Diệu') {
+            return "4 - 8";
+        }
+        if (sao === 'Vân Hớn') {
+            return "2 - 8";
+        }
+        return "0";
     }
-    return "check"
+    return "";
 }
 
-function checkTamTai(currentYear, yearOfBirth) {
+function isTuoiHopLe(tuoi) {
+    return tuoi >= 10 && tuoi < 90;
+}
+
+function checkTamTai(currentYear, yearOfBirth, tuoi) {
     if ((currentYear - yearOfBirth + 1) < 10){
         return""
     }
@@ -521,6 +549,10 @@ function checkTamTai(currentYear, yearOfBirth) {
         if (currentZodiac == zodiacs[11] || currentZodiac == zodiacs[0] || currentZodiac == zodiacs[1]) {
             return "Tam Tai"
         }
+    }
+
+    if (tuoi == 21 || tuoi == 23 || tuoi == 31) {
+        return "Tam Tai"
     }
 
     return ""
@@ -806,7 +838,7 @@ function generatePDF(listMaSo) {
                         let nangNhe = getNangNhe(tuoi, gioiTinh, sao, han)
                         rowData.push(nangNhe);//Nặng-nhẹ
 
-                        let kyThang = getKyThang(tuoi, sao, han)
+                        let kyThang = getKyThang(tuoi, gioiTinh, sao, han)
                         rowData.push(kyThang);//Kỵ Tháng
 
                         let tamTai = checkTamTai(year, value[10]);//Tam Tai
