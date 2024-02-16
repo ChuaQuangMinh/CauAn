@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbxTTyLi28gLlv1QtQtaWJgTvwT_V1N2d3VjCUghKtH8FW5WcIq18W5yL0tTMRsnprSysQ/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbxAlTmeJbAWyNEg0hkrK3f3w2OvC7pWgnMsp6hpX8onse8RKap97LzF6-cAf2tWj0zH/exec";
 const namHienTai = 2024;
 function BtnAdd() {
     var v = $("#TRow").clone().appendTo("#TBody");
@@ -293,6 +293,7 @@ $(document).ready(function () {
                             document.getElementsByName("dia_chi")[0].value = value[2];
                             dc_update(value[3], value[4], value[5]);
                             document.getElementsByName("so_dien_thoai")[0].value = value[6];
+                            
                         }
                         else {
                             BtnAdd();
