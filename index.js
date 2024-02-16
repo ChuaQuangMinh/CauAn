@@ -394,7 +394,7 @@ function getSao(gioiTinh, tuoi) {
         } else if ([14, 23, 32, 41, 50, 59, 68, 77, 86, 95].includes(tuoi)) {
             return "Thái Dương";
         } else if ([15, 24, 33, 42, 51, 60, 69, 78, 87, 96].includes(tuoi)) {
-            return "Văn Hớn";
+            return "Vân Hớn";
         } else if ([16, 25, 34, 43, 52, 61, 70, 79, 88, 97].includes(tuoi)) {
             return "Kế Đô";
         } else if ([17, 26, 35, 44, 53, 62, 71, 80, 89, 98].includes(tuoi)) {
