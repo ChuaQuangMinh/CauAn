@@ -501,6 +501,9 @@ function getKyThang(tuoi, gioiTinh, sao, han) {
         if (sao === 'Vân Hớn') {
             return "2 - 8";
         }
+        if (sao === 'Thái Âm') {
+            return "11";
+        }
         return "0";
     }
     return "";
