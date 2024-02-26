@@ -379,7 +379,7 @@ function CreateNew() {
 }
 
 function getSao(gioiTinh, tuoi) {
-    if (tuoi < 10 || tuoi > 99) {
+    if (tuoi < 10 || tuoi > 90) {
         return ""
     }
     if (gioiTinh === 'Nam') {
@@ -426,7 +426,7 @@ function getSao(gioiTinh, tuoi) {
 }
 
 function getHan(gioiTinh, tuoi) {
-    if (tuoi < 10 || tuoi > 97) {
+    if (tuoi < 10 || tuoi > 90) {
         return ""
     }
     if (gioiTinh === 'Nam') {
@@ -442,7 +442,7 @@ function getHan(gioiTinh, tuoi) {
             return "Toán Tận";
         } else if ([15, 24, 33, 42, 51, 59, 60, 68, 77, 86, 95].includes(tuoi)) {
             return "Thiên La";
-        } else if ([16, 25, 34, 43, 52, 61, 60, 70, 78, 87, 96].includes(tuoi)) {
+        } else if ([16, 25, 34, 43, 52, 61, 60, 69 ,70, 78, 87, 96].includes(tuoi)) {
             return "Địa Võng";
         } else if ([17, 26, 35, 44, 53, 62, 71, 79, 80, 88, 97].includes(tuoi)) {
             return "Diêm Vương";
@@ -460,7 +460,7 @@ function getHan(gioiTinh, tuoi) {
             return "Huỳnh Tuyền";
         } else if ([15, 24, 33, 42, 51, 59, 60, 68, 77, 86, 95].includes(tuoi)) {
             return "Diêm Vương";
-        } else if ([16, 25, 34, 43, 52, 61, 60, 70, 78, 87, 96].includes(tuoi)) {
+        } else if ([16, 25, 34, 43, 52, 61, 60, 69, 70, 78, 87, 96].includes(tuoi)) {
             return "Địa Võng";
         } else if ([17, 26, 35, 44, 53, 62, 71, 79, 80, 88, 97].includes(tuoi)) {
             return "Thiên La";
@@ -555,7 +555,7 @@ function checkTamTai(currentYear, yearOfBirth, tuoi) {
         }
     }
 
-    if (tuoi == 21 || tuoi == 23 || tuoi == 31) {
+    if (tuoi == 23 || tuoi == 31) {
         return "Tam Tai"
     }
 
