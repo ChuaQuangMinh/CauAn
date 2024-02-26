@@ -845,7 +845,7 @@ function generatePDF(listMaSo) {
                         let kyThang = getKyThang(tuoi, gioiTinh, sao, han)
                         rowData.push(kyThang);//Kỵ Tháng
 
-                        let tamTai = checkTamTai(year, value[10]);//Tam Tai
+                        let tamTai = checkTamTai(year, value[10], tuoi);//Tam Tai
                         rowData.push(tamTai);
 
                         data.push(rowData);
