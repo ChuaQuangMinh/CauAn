@@ -510,7 +510,7 @@ function getKyThang(tuoi, gioiTinh, sao, han) {
 }
 
 function isTuoiHopLe(tuoi) {
-    return tuoi >= 10 && tuoi < 90;
+    return tuoi >= 10 && tuoi <= 90;
 }
 
 function checkTamTai(currentYear, yearOfBirth, tuoi) {

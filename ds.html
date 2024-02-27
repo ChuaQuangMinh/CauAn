@@ -117,11 +117,11 @@
                       <p class="so_dien_thoai"></p>
                     </div>
                   </div>
-                  <!-- <div class="col-md-2">
+                  <div class="col-md-2">
                     <div class="mb-0">
                       <p class="trang_thai"></p>
                     </div>
-                  </div> -->
+                  </div>
                 </div>
               </td>
               <td class="custom-td">
@@ -181,9 +181,9 @@
           var trangThai = value[7];
           $row.find(".trang_thai").text(trangThai);
           if (trangThai === "Chưa in") {
-            $row.find(".trang_thai").addClass("chua_in");
-          } else if (trangThai === "Đã in") {
-            $row.find(".trang_thai").addClass("da_in");
+            $row.find(".trang_thai").text("Chưa Viết Giấy").addClass("chua_in");
+          } else if (trangThai === "R") {
+            $row.find(".trang_thai").text("Đã Viết Giấy").addClass("da_in");
           }
           var maSoLink = "index.html?ma_so=" + value[0];
           $row.find("a.btn-primary").attr("href", maSoLink);
