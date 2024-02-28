@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbxAlTmeJbAWyNEg0hkrK3f3w2OvC7pWgnMsp6hpX8onse8RKap97LzF6-cAf2tWj0zH/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbwNx4xa7KjnzBXkomhmluRh8dkWBk2ilMTrsgxdV16LONxEPLOsruLJC0JGxdmsJM92EA/exec";
 const namHienTai = 2024;
 function BtnAdd() {
     var v = $("#TRow").clone().appendTo("#TBody");
@@ -23,6 +23,8 @@ function MaxInv() {
             $("input[name='ma_so']").val(data);
         });
 }
+
+
 
 function updateNguoiSanh(input) {
     var row = input.closest('tr');
@@ -563,7 +565,19 @@ function checkTamTai(currentYear, yearOfBirth, tuoi) {
 }  
 
 
-
+function tickPrint(listMaSo){
+    var numberOfRequests = listMaSo.length;
+    var completedRequests = 0;
+    while (completedRequests < numberOfRequests) {
+        var maSo = listMaSo[completedRequests]
+        $.getJSON(AppsScriptLink + "?page=print&no=" + maSo, function (dataAPI) {
+            if (dataAPI == "NOT FOUND") {
+                alert('Không tìm thấy...');
+            }
+        })
+        completedRequests++;
+    }
+}
 
 function generatePDF(listMaSo) {
     var printButton = $(event.currentTarget);
@@ -795,6 +809,8 @@ function generatePDF(listMaSo) {
             return;
         }
         var maSo = listMaSo[index];
+
+        
 
         $.getJSON(AppsScriptLink + "?page=search&no=" + maSo, function (dataAPI) {
             if (dataAPI == "NOT FOUND") {

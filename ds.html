@@ -133,7 +133,10 @@
                 <a href="" class="btn btn-sm btn-primary mb-1"><i class="bi bi-pencil"></i></a>
                 <button class="btn btn-sm btn-success print-button mb-1" data-ma-so="your_ma_so_here"><i
                     class="bi bi-printer"></i></button>
-                <!-- <button class="btn btn-sm btn-danger mb-1"><i class="bi bi-trash"></i></button> -->
+                <button class="btn btn-sm btn-secondary check-button mb-1" data-ma-so="your_ma_so_here">
+                  <i class="bi bi-check"></i>
+                </button>
+                <!-- <button class="btn btn-sm btn-danger mb-1" data-ma-so="your_ma_so_here"><i class="bi bi-trash"></i></button> -->
               </td>
             </tr>
           </tbody>
@@ -193,6 +196,28 @@
             var maSo = $(this).data('ma-so'); // Lấy giá trị data-ma-so
             showLoadingOverlay();
             generatePDF([maSo]); // Gọi hàm generatePDF với mã số
+          });
+          var $checkButton = $row.find("button.check-button");
+          $checkButton.attr("data-ma-so", value[0]); // Set the data-ma-so attribute
+          $checkButton.on("click", function () {
+            var maSo = $(this).data('ma-so'); // Lấy giá trị data-ma-so
+            tickPrint([maSo]);
+
+            // Lấy và kiểm tra trạng thái hiện tại của .trang_thai
+            var currentStatus = $row.find(".trang_thai").text().trim();
+
+            // Chuyển đổi giữa "Chưa Viết Giấy" và "Đã Viết Giấy"
+            var newStatus = (currentStatus === "Chưa Viết Giấy") ? "Đã Viết Giấy" : "Chưa Viết Giấy";
+
+            // Cập nhật .trang_thai với trạng thái mới
+            $row.find(".trang_thai").text(newStatus);
+
+            // Thêm hoặc loại bỏ class tùy thuộc vào trạng thái mới
+            if (newStatus === "Chưa Viết Giấy") {
+                $row.find(".trang_thai").removeClass("da_in").addClass("chua_in");
+            } else {
+                $row.find(".trang_thai").removeClass("chua_in").addClass("da_in");
+            }
           });
           $("#TBody").append($row); // Append the row to the table body
         });

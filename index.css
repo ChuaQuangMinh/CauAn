@@ -16,6 +16,11 @@
     display: none;
 }
 
+.btn-warning {
+    color: white;
+    background-color: darkorange;
+}
+
 .dai_dien {
     font-size: 18px;
     /* Điều chỉnh kích thước font cho dai_dien */
