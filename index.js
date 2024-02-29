@@ -1,4 +1,17 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbxm6gIeAh4WVmuwJfvCQSqgc2J2lDqEP0QRx80tJdIjQYamImhqVDtZ4Hf6fqX0p5nPNA/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbyc5o2y4hfj_NmA8iCYzyKtkxqBTfNyJ3a4Z2DYA0F7aL_qDOxUUT2iEuQ8rQ3Tiy8i2A/exec";
+
+function loadJSON(file, callback) {
+    var xobj = new XMLHttpRequest();
+    xobj.overrideMimeType("application/json");
+    xobj.open('GET', file, true);
+    xobj.onreadystatechange = function () {
+      if (xobj.readyState == 4 && xobj.status == "200") {
+        callback(JSON.parse(xobj.responseText));
+      }
+    };
+    xobj.send(null);
+}
+
 const namHienTai = 2024;
 function BtnAdd() {
     var v = $("#TRow").clone().appendTo("#TBody");
@@ -69,17 +82,24 @@ $(document).ready(function () {
     }
 
     // Dữ liệu cho các select, bạn có thể thay thế bằng dữ liệu thực tế từ nguồn dữ liệu của bạn
-    var dc1Data = ["Cần Đước", "Cần Giuộc", "Bình Chánh", "TP.HCM", "Gò Công", "Tiền Giang", "Khác"];
-    var dc2Data = {
+    const dc1Data = ["Cần Đước", "Long An", "TP.HCM", "Gò Công", "Tiền Giang", "Khác"];
+    const dc2Data = {
+        //Cần Đước
         "Cần Đước": ["TT.Cần Đước", "Xã Tân Lân", "Xã Tân Ân", "Xã Tân Chánh", "Xã Mỹ Lệ", "Xã Phước Tuy", "Xã Phước Đông", "Xã Phước Vân", "Xã Tân Trạch", "Xã Long Hựu Đông", "Xã Long Hựu Tây", "Xã Long Sơn", "Xã Long Cang", "Xã Long Hòa", "Xã Long Định", "Xã Long Khê", "Xã Long Trạch"],
-        "Cần Giuộc": ["none"],
-        "Bình Chánh": ["none"],
-        "TP.HCM": ["none"],
+
+        //Long An
+        "Long An": ["Huyện Cần Giuộc", "Huyện Bến Lức", "Huyện Châu Thành", "Huyện Đức Hòa", "Huyện Đức Huệ", "Huyện Mộc Hóa", "Huyện Tân Hưng", "Huyện Tân Thạnh", "Huyện Tân Trụ", "Huyện Thạnh Hóa", "Huyện Thủ Thừa", "Huyện Vĩnh Hưng", "TP.Tân An", "Thị xã Kiến Tường"],
+
+        //Thành phố Hồ Chí Minh
+        "TP.HCM": ["Khác", "Quận 1", "Quận 3", "Quận 4", "Quận 5", "Quận 6", "Quận 7", "Quận 8", "Quận 9", "Quận Bình Tân", "Quận Bình Thạnh", "Quận Gò Vấp", "Quận Phú Nhuận", "Quận Tân Bình", "Quận Tân Phú", "Huyện Bình Chánh", "Huyện Cần Giờ", "Huyện Củ Chi", "Huyện Hóc Môn", "Huyện Nhà Bè", "TP.Thủ Đức"],
+
+        
         "Gò Công": ["none"],
         "Tiền Giang": ["none"],
         "Khác": ["none"]
     };
-    var dc3Data = {
+    const dc3Data = {
+        //Huyện Cần Đước
         "TT.Cần Đước": ["Khu 1B", "Khu 1A", "Khu 1C", "Khu 2", "Khu 3", "Khu 4", "Khu 5", "Khu 6", "Khu 7A", "Khu 7B", "Khu 8"],
         "Xã Tân Lân": ["Khác", "Ấp Xóm Chùa", "Ấp Bà Chủ", "Ấp Nhà Thờ", "Ấp Xóm Mới", "Ấp Nhà Dài", "Ấp Ao Gòn", "Ấp Nhà Trường", "Ấp Cầu Xây", "Ấp Bình Hòa", "Ấp Bà Thoại", "Ấp Rạch Bộng"],
         "Xã Phước Tuy": ["Khác", "Ấp 1", "Ấp 2", "Ấp 3", "Ấp 4", "Ấp 5", "Ấp 6", "Ấp 7"],
@@ -97,9 +117,105 @@ $(document).ready(function () {
         "Xã Long Định": ["none"],
         "Xã Long Khê": ["none"],
         "Xã Long Trạch": ["none"],
-        "none": ["none"],
-    };
 
+        //Long An
+        //Huyện Cần Giuộc
+        "Huyện Cần Giuộc": ["Khác", "TT.Cần Giuộc", "Xã Phước Lý", "Xã Long Thượng", "Xã Long Hậu", "Xã Phước Hậu", "Xã Mỹ Lộc", "Xã Phước Lại", "Xã Phước Lâm", "Xã Thuận Thành", "Xã Phước Vĩnh Tây", "Xã Phước Vĩnh Đông", "Xã Long An", "Xã Long Phụng", "Xã Đông Thạnh", "Xã Tân Tập", "Xã Tân Kim"],
+
+        //Huyện Bến Lức
+        "Huyện Bến Lức": ["Khác", "TT.Bến Lức", "Xã Thạnh Lợi", "Xã Lương Bình", "Xã Thạnh Hòa", "Xã Lương Hòa", "Xã Tân Hòa", "Xã Tân Bửu", "Xã An Thạnh", "Xã Bình Đức", "Xã Mỹ Yên", "Xã Thanh Phú", "Xã Long Hiệp", "Xã Thạnh Đức", "Xã Phước Lợi", "Xã Nhựt Chánh"],
+
+        //Huyện Châu Thành
+        "Huyện Châu Thành": ["Khác", "TT.Tầm Vu", "Xã Bình Quới", "Xã Hòa Phú", "Xã Phú Ngãi Trị", "Xã Vĩnh Công", "Xã Thuận Mỹ", "Xã Hiệp Thạnh", "Xã Phước Tân Hưng", "Xã Thanh Phú Long", "Xã Dương Xuân Hội", "Xã An Lục Long", "Xã Long Trì", "Xã Thanh Vĩnh Đông"],
+
+        //Huyện Đức Hòa
+        "Huyện Đức Hòa": ["Khác", "TT.Hậu Nghĩa", "TT.Hiệp Hòa", "TT.Đức Hòa", "Xã Lộc Giang", "Xã An Ninh Đông", "Xã An Ninh Tây", "Xã Tân Mỹ", "Xã Hiệp Hòa", "Xã Đức Lập Thượng", "Xã Đức Lập Hạ", "Xã Tân Phú", "Xã Mỹ Hạnh Bắc", "Xã Đức Hòa Thượng", "Xã Hòa Khánh Tây", "Xã Hòa Khánh Đông", "Xã Mỹ Hạnh Nam", "Xã Hòa Khánh Nam", "Xã Đức Hòa Đông", "Xã Đức Hòa Hạ", "Xã Hựu Thạnh"],
+
+        //Huyện Đức Huệ
+        "Huyện Đức Huệ": ["Khác", "TT. Đông Thành", "Xã Mỹ Quý Đông", "Xã Mỹ Thạnh Bắc", "Xã Mỹ Quý Tây", "Xã Mỹ Thạnh Tây", "Xã Mỹ Thạnh Đông", "Xã Bình Thành", "Xã Bình Hòa Bắc", "Xã Bình Hòa Hưng", "Xã Bình Hòa Nam", "Xã Mỹ Bình"],
+
+        //Huyện Mộc Hóa
+        "Huyện Mộc Hóa": ["Khác", "Xã Bình Hòa Tây", "Xã Bình Thạnh", "Xã Bình Hòa Trung", "Xã Bình Hòa Đông", "TT.Bình Phong Thạnh", "Xã Tân Lập", "Xã Tân Thành"],
+
+        //Huyện Tân Hưng
+        "Huyện Tân Hưng": ["Khác", "TT.Tân Hưng", "Xã Hưng Hà", "Xã Hưng Điền B", "Xã Hưng Điền", "Xã Thạnh Hưng", "Xã Hưng Thạnh", "Xã Vĩnh Thạnh", "Xã Vĩnh Châu B", "Xã Vĩnh Lợi", "Xã Vĩnh Đại", "Xã Vĩnh Châu A", "Xã Vĩnh Bửu"],
+
+        //Huyện Tân Thạnh
+        "Huyện Tân Thạnh": ["Khác", "TT.Tân Thạnh", "Xã Bắc Hòa", "Xã Hậu Thạnh Tây", "Xã Nhơn Hòa Lập", "Xã Tân Lập", "Xã Hậu Thạnh Đông", "Xã Nhơn Hoà", "Xã Kiến Bình", "Xã Tân Thành", "Xã Tân Bình", "Xã Tân Ninh", "Xã Nhơn Ninh", "Xã Tân Hòa"],
+
+        //Huyện Tân Trụ
+        "Huyện Tân Trụ": ["Khác", "TT.Tân Trụ", "Xã Tân Bình", "Xã Quê Mỹ Thạnh", "Xã Lạc Tấn", "Xã Bình Trinh Đông", "Xã Tân Phước Tây", "Xã Bình Lãng", "Xã Bình Tịnh", "Xã Đức Tân", "Xã Nhựt Ninh"],
+
+        //Huyện Thạnh Hóa
+        "Huyện Thạnh Hóa": ["Khác", "TT.Thạnh Hóa", "Xã Tân Hiệp", "Xã Thuận Bình", "Xã Thạnh Phước", "Xã Thạnh Phú", "Xã Thuận Nghĩa Hòa", "Xã Thủy Đông", "Xã Thủy Tây", "Xã Tân Tây", "Xã Tân Đông", "Xã Thạnh An"],
+
+        //Huyện Thủ Thừa
+        "Huyện Thủ Thừa": ["Khác", "TT.Thủ Thừa", "Xã Long Thạnh", "Xã Tân Thành", "Xã Long Thuận", "Xã Mỹ Lạc", "Xã Mỹ Thạnh", "Xã Bình An", "Xã Nhị Thành", "Xã Mỹ An", "Xã Bình Thạnh", "Xã Mỹ Phú", "Xã Tân Long"],
+
+        //Huyện Vĩnh Hưng
+        "Huyện Vĩnh Hưng": ["Khác", "TT.Vĩnh Hưng", "Xã Hưng Điền A", "Xã Khánh Hưng", "Xã Thái Trị", "Xã Vĩnh Trị", "Xã Thái Bình Trung", "Xã Vĩnh Bình", "Xã Vĩnh Thuận", "Xã Tuyên Bình", "Xã Tuyên Bình Tây"],
+
+        //Thành phố Tân An
+        "TP.Tân An": ["Khác", "Phường 1", "Phường 2", "Phường 3", "Phường 4", "Phường 5", "Phường 6", "Phường 7", "Phường Khánh Hậu", "Phường Tân Khánh", "Xã An Vĩnh Ngãi", "Xã Bình Tâm", "Xã Hướng Thọ Phú", "Xã Lợi Bình Nhơn", "Xã Nhơn Thạnh Trung"],
+
+        //Thị xã Kiến Tường
+        "Thị xã Kiến Tường": ["Khác", "Phường 1", "Phường 2", "Phường 3", "Xã Bình Hiệp", "Xã Bình Tân", "Xã Thạnh Hưng", "Xã Thạnh Trị", "Xã Tuyên Thạnh"],
+
+
+        //Thành phố Hồ Chí Minh
+        "Quận 1": ["Khác", "Phường Bến Nghé", "Phường Bến Thành", "Phường Cầu Kho", "Phường Cầu Ông Lãnh", "Phường Cô Giang", "Phường Đa Kao", "Phường Nguyễn Cư Trinh", "Phường Nguyễn Thái Bình", "Phường Phạm Ngũ Lão", "Phường Tân Định"],
+
+        "Quận 3": ["Khác", "Phường 01", "Phường 02", "Phường 03", "Phường 04", "Phường 05", "Phường 09", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14", "Phường Võ Thị Sáu"],
+
+        "Quận 4": ["Khác", "Phường 01", "Phường 02", "Phường 03", "Phường 04", "Phường 06", "Phường 08", "Phường 09", "Phường 10", "Phường 13", "Phường 14", "Phường 15", "Phường 16", "Phường 18"],
+
+        "Quận 5": ["Khác", "Phường 01", "Phường 02", "Phường 03", "Phường 04", "Phường 05", "Phường 06", "Phường 07", "Phường 08", "Phường 09", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14"],
+
+        "Quận 6": ["Khác", "Phường 01", "Phường 02", "Phường 03", "Phường 04", "Phường 05", "Phường 06", "Phường 07", "Phường 08", "Phường 09", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14"],
+
+        "Quận 7": ["Khác", "Phường Tân Thuận Đông", "Phường Tân Thuận Tây", "Phường Tân Kiểng", "Phường Tân Hưng", "Phường Bình Thuận", "Phường Tân Quy", "Phường Phú Thuận", "Phường Tân Phú", "Phường Tân Phong", "Phường Phú Mỹ"],
+
+        "Quận 8": ["Khác", "Phường 01", "Phường 02", "Phường 03", "Phường 04", "Phường 05", "Phường 06", "Phường 07", "Phường 08", "Phường 09", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14", "Phường 15", "Phường 16"],
+
+        "Quận 9": ["none"],
+
+        "Quận Bình Tân": ["Khác", "Phường Bình Hưng Hòa", "Phường Bình Hưng Hoà A", "Phường Bình Hưng Hoà B", "Phường Bình Trị Đông", "Phường Bình Trị Đông A", "Phường Bình Trị Đông B", "Phường Tân Tạo", "Phường Tân Tạo A", "Phường An Lạc", "Phường An Lạc A"],
+
+        "Quận Bình Thạnh": ["Khác", "Phường 01", "Phường 02", "Phường 03", "Phường 05", "Phường 06", "Phường 07", "Phường 11", "Phường 12", "Phường 13", "Phường 14", "Phường 15", "Phường 17", "Phường 19", "Phường 21", "Phường 22", "Phường 24", "Phường 25", "Phường 26", "Phường 27", "Phường 28"],
+
+        "Quận Gò Vấp": ["Khác", "Phường 01", "Phường 03", "Phường 04", "Phường 05", "Phường 06", "Phường 07", "Phường 08", "Phường 09", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14", "Phường 15", "Phường 16", "Phường 17"],
+
+        "Quận Phú Nhuận": ["Khác", "Phường 01", "Phường 02", "Phường 03", "Phường 04", "Phường 05", "Phường 07", "Phường 08", "Phường 09", "Phường 10", "Phường 11", "Phường 13", "Phường 15", "Phường 17"],
+
+        "Quận Tân Bình": ["Khác", "Phường 01", "Phường 02", "Phường 03", "Phường 04", "Phường 05", "Phường 06", "Phường 07", "Phường 08", "Phường 09", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14", "Phường 15"],
+
+        "Quận Tân Phú": ["Khác", "Phường Tân Sơn Nhì", "Phường Tây Thạnh", "Phường Sơn Kỳ", "Phường Tân Quý", "Phường Tân Thành", "Phường Phú Thọ Hòa", "Phường Phú Thạnh", "Phường Phú Trung", "Phường Hòa Thạnh", "Phường Hiệp Tân", "Phường Tân Thới Hòa"],
+
+        "Huyện Bình Chánh": ["Khác", "Thị trấn Tân Túc", "Xã Phạm Văn Hai", "Xã Vĩnh Lộc A", "Xã Vĩnh Lộc B", "Xã Bình Lợi", "Xã Lê Minh Xuân", "Xã Tân Nhựt", "Xã Tân Kiên", "Xã Bình Hưng", "Xã Phong Phú", "Xã An Phú Tây", "Xã Hưng Long", "Xã Đa Phước", "Xã Tân Quý Tây", "Xã Bình Chánh", "Xã Quy Đức"],
+
+        "Huyện Cần Giờ": ["Khác", "Thị trấn Cần Thạnh", "Xã Bình Khánh", "Xã Tam Thôn Hiệp", "Xã An Thới Đông", "Xã Thạnh An", "Xã Long Hòa", "Xã Lý Nhơn"],
+
+        "Huyện Củ Chi": ["Khác", "Thị trấn Củ Chi", "Xã Phú Mỹ Hưng", "Xã An Phú", "Xã Trung Lập Thượng", "Xã An Nhơn Tây", "Xã Nhuận Đức", "Xã Phạm Văn Cội", "Xã Phú Hòa Đông", "Xã Trung Lập Hạ", "Xã Trung An", "Xã Phước Thạnh", "Xã Phước Hiệp", "Xã Tân An Hội", "Xã Phước Vĩnh An", "Xã Thái Mỹ", "Xã Tân Thạnh Tây", "Xã Hòa Phú", "Xã Tân Thạnh Đông", "Xã Bình Mỹ", "Xã Tân Phú Trung", "Xã Tân Thông Hội"],
+
+        "Huyện Hóc Môn": ["Khác", "Thị trấn Hóc Môn", "Xã Tân Hiệp", "Xã Nhị Bình", "Xã Đông Thạnh", "Xã Tân Thới Nhì", "Xã Thới Tam Thôn", "Xã Xuân Thới Sơn", "Xã Tân Xuân", "Xã Xuân Thới Đông", "Xã Trung Chánh", "Xã Xuân Thới Thượng", "Xã Bà Điểm"],
+
+        "Huyện Nhà Bè": ["Khác", "Thị trấn Nhà Bè", "Xã Phước Kiển", "Xã Phước Lộc", "Xã Nhơn Đức", "Xã Phú Xuân", "Xã Long Thới", "Xã Hiệp Phước"],
+
+        "TP.Thủ Đức": [
+            "Khác", 
+            "Phường Linh Xuân", "Phường Bình Chiểu", "Phường Linh Trung", "Phường Tam Bình", "Phường Tam Phú", 
+            "Phường Hiệp Bình Phước", "Phường Hiệp Bình Chánh", "Phường Linh Chiểu", "Phường Linh Tây", "Phường Linh Đông", 
+            "Phường Bình Thọ", "Phường Trường Thọ", "Phường Long Bình", "Phường Long Thạnh Mỹ", "Phường Tân Phú", 
+            "Phường Hiệp Phú", "Phường Tăng Nhơn Phú A", "Phường Tăng Nhơn Phú B", "Phường Phước Long B", "Phường Phước Long A", 
+            "Phường Trường Thạnh", "Phường Long Phước", "Phường Long Trường", "Phường Phước Bình", "Phường Phú Hữu", 
+            "Phường Thảo Điền", "Phường An Phú", "Phường An Khánh", "Phường Bình Trưng Đông", "Phường Bình Trưng Tây", 
+            "Phường Cát Lái", "Phường Thạnh Mỹ Lợi", "Phường An Lợi Đông", "Phường Thủ Thiêm"
+        ],
+
+        //Khác
+        "none": ["none"],
+        "Khác": ["none"]
+    };
 
     // Lấy các select
     var dc1Select = document.getElementById("dc_1");
@@ -110,20 +226,25 @@ $(document).ready(function () {
     function dia_chi_day_du() {
         let dia_chi_day_du = "";
         let dc_1 = dc1Select.value;
+
         if (dc_1 === "Cần Đước") {
             dc_1 = "Huyện " + dc_1;
         }
-        if (dc3Select.value !== "none" && dc3Select.value !== "Khác") {
+        if (dc3Select.value !== "none" && dc3Select.value !== "Khác" && dc3Select.value !== "") {
             dia_chi_day_du = dc3Select.value + ", " + dc2Select.value + ", " + dc_1;
             let diaChiInput = document.querySelector('input[name="dia_chi"]');
             diaChiInput.value = dia_chi_day_du;
-        } else if (dc2Select.value !== "none" && dc2Select.value !== "Khác") {
+        } else if (dc2Select.value !== "none" && dc2Select.value !== "Khác"  && dc2Select.value !== "") {
             dia_chi_day_du = dc2Select.value + ", " + dc_1;
             let diaChiInput = document.querySelector('input[name="dia_chi"]');
             diaChiInput.value = dia_chi_day_du;
-        } else if (dc1Select.value !== "none" && dc1Select.value !== "Khác") {
+        } else if (dc1Select.value !== "none" && dc1Select.value !== "Khác" && dc1Select.value !== "") {
             dia_chi_day_du = dc_1;
             let diaChiInput = document.querySelector('input[name="dia_chi"]');
+
+            alert("3");
+            alert(dia_chi_day_du);
+
             diaChiInput.value = dia_chi_day_du;
         }
     }
@@ -159,7 +280,7 @@ $(document).ready(function () {
 
     function dc_update(dc_1, dc_2, dc_3) {
         dc1Select.value = dc_1;
-        if (dc_1 === "Cần Đước") {
+        if (dc_1 === "Cần Đước" || dc_1 === "TP.HCM" || dc_1 === "Long An") {
             let selectedValue = dc_1;
             for (let i = 0; i < dc2Data[selectedValue].length; i++) {
                 let option = document.createElement("option");
@@ -210,7 +331,7 @@ $(document).ready(function () {
             option.value = dc2Data[selectedValue][i];
             dc2Select.appendChild(option);
         }
-        if (selectedValue === "Cần Đước") {
+        if (selectedValue === "Cần Đước" || selectedValue === "TP.HCM" || selectedValue === "Long An") {
             dc2Select.innerHTML = ""; // Xóa tất cả các tùy chọn hiện có trong dc_2
             dc3Select.innerHTML = ""; // Xóa tất cả các tùy chọn hiện có trong dc_3
             dc_new();
