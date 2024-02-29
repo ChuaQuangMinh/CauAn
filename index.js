@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbwNx4xa7KjnzBXkomhmluRh8dkWBk2ilMTrsgxdV16LONxEPLOsruLJC0JGxdmsJM92EA/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbxm6gIeAh4WVmuwJfvCQSqgc2J2lDqEP0QRx80tJdIjQYamImhqVDtZ4Hf6fqX0p5nPNA/exec";
 const namHienTai = 2024;
 function BtnAdd() {
     var v = $("#TRow").clone().appendTo("#TBody");

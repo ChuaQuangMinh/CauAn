@@ -200,25 +200,26 @@
           var $checkButton = $row.find("button.check-button");
           $checkButton.attr("data-ma-so", value[0]); // Set the data-ma-so attribute
           $checkButton.on("click", function () {
-            var maSo = $(this).data('ma-so'); // Lấy giá trị data-ma-so
+            var maSo = $(this).data('ma-so');
             tickPrint([maSo]);
 
-            // Lấy và kiểm tra trạng thái hiện tại của .trang_thai
             var currentStatus = $row.find(".trang_thai").text().trim();
-
-            // Chuyển đổi giữa "Chưa Viết Giấy" và "Đã Viết Giấy"
             var newStatus = (currentStatus === "Chưa Viết Giấy") ? "Đã Viết Giấy" : "Chưa Viết Giấy";
 
-            // Cập nhật .trang_thai với trạng thái mới
+            // Fix condition for "Tam Tai Chưa Viết Giấy"
+            if (currentStatus === "Tam Tai Chưa Viết Giấy") {
+                newStatus = "Đã Viết Giấy";
+            }
+
             $row.find(".trang_thai").text(newStatus);
 
-            // Thêm hoặc loại bỏ class tùy thuộc vào trạng thái mới
-            if (newStatus === "Chưa Viết Giấy") {
+            if (newStatus === "Đã Viết Giấy") {
+                $row.find(".trang_thai").addClass("da_in").removeClass("chua_in");
+            } else if (newStatus === "Chưa Viết Giấy") {
                 $row.find(".trang_thai").removeClass("da_in").addClass("chua_in");
-            } else {
-                $row.find(".trang_thai").removeClass("chua_in").addClass("da_in");
             }
           });
+
           $("#TBody").append($row); // Append the row to the table body
         });
         hideLoadingOverlay();
