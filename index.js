@@ -1,34 +1,57 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbyc5o2y4hfj_NmA8iCYzyKtkxqBTfNyJ3a4Z2DYA0F7aL_qDOxUUT2iEuQ8rQ3Tiy8i2A/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbzUx7Wcv0IrshnDbJurYIFJrCcl80V3-FoVepuiWmvuk_upRpA_xppRZQj9rKyfaoUOPg/exec";
 
 function loadJSON(file, callback) {
     var xobj = new XMLHttpRequest();
     xobj.overrideMimeType("application/json");
     xobj.open('GET', file, true);
     xobj.onreadystatechange = function () {
-      if (xobj.readyState == 4 && xobj.status == "200") {
-        callback(JSON.parse(xobj.responseText));
-      }
+        if (xobj.readyState == 4 && xobj.status == "200") {
+            callback(JSON.parse(xobj.responseText));
+        }
     };
     xobj.send(null);
 }
 
 const namHienTai = 2024;
+function BtnMoveUp(v) {
+    var currentRow = $(v).closest('tr');
+    var prevRow = currentRow.prev('tr');
+    var currentIndex = currentRow.index();
+    if (prevRow.length && currentIndex > 1) {
+        currentRow.insertBefore(prevRow);
+        updateRowNumbers();
+    }
+}
+
+function BtnMoveDown(v) {
+    var currentRow = $(v).closest('tr');
+    var nextRow = currentRow.next('tr');
+
+    if (nextRow.length) {
+        currentRow.insertAfter(nextRow);
+        updateRowNumbers();
+    }
+}
+
+function updateRowNumbers() {
+    $("#TBody tr").each(function (index, row) {
+        $(row).find("th").first().html(index);
+    });
+}
+
 function BtnAdd() {
     var v = $("#TRow").clone().appendTo("#TBody");
     $(v).find("input").val('');
     $(v).removeClass("d-none");
-    $(v).find("th").first().html($('#TBody tr').length - 1);
+    updateRowNumbers();
 }
 
 function BtnDel(v) {
-    $(v).parent().parent().remove();
-    $("#TBody").find("tr").each(
-        function (index) {
-            $(this).find("th").first().html(index);
-        }
-
-    );
+    $(v).closest('tr').remove();
+    updateRowNumbers();
 }
+
+
 
 function MaxInv() {
     $.getJSON(AppsScriptLink + "?page=max",
@@ -82,7 +105,7 @@ $(document).ready(function () {
     }
 
     // Dữ liệu cho các select, bạn có thể thay thế bằng dữ liệu thực tế từ nguồn dữ liệu của bạn
-    const dc1Data = ["Cần Đước", "Long An", "TP.HCM", "Gò Công", "Tiền Giang", "Khác"];
+    const dc1Data = ["Cần Đước", "Long An", "TP.HCM", "Khác"];
     const dc2Data = {
         //Cần Đước
         "Cần Đước": ["TT.Cần Đước", "Xã Tân Lân", "Xã Tân Ân", "Xã Tân Chánh", "Xã Mỹ Lệ", "Xã Phước Tuy", "Xã Phước Đông", "Xã Phước Vân", "Xã Tân Trạch", "Xã Long Hựu Đông", "Xã Long Hựu Tây", "Xã Long Sơn", "Xã Long Cang", "Xã Long Hòa", "Xã Long Định", "Xã Long Khê", "Xã Long Trạch"],
@@ -93,9 +116,6 @@ $(document).ready(function () {
         //Thành phố Hồ Chí Minh
         "TP.HCM": ["Khác", "Quận 1", "Quận 3", "Quận 4", "Quận 5", "Quận 6", "Quận 7", "Quận 8", "Quận 9", "Quận Bình Tân", "Quận Bình Thạnh", "Quận Gò Vấp", "Quận Phú Nhuận", "Quận Tân Bình", "Quận Tân Phú", "Huyện Bình Chánh", "Huyện Cần Giờ", "Huyện Củ Chi", "Huyện Hóc Môn", "Huyện Nhà Bè", "TP.Thủ Đức"],
 
-        
-        "Gò Công": ["none"],
-        "Tiền Giang": ["none"],
         "Khác": ["none"]
     };
     const dc3Data = {
@@ -202,13 +222,13 @@ $(document).ready(function () {
         "Huyện Nhà Bè": ["Khác", "Thị trấn Nhà Bè", "Xã Phước Kiển", "Xã Phước Lộc", "Xã Nhơn Đức", "Xã Phú Xuân", "Xã Long Thới", "Xã Hiệp Phước"],
 
         "TP.Thủ Đức": [
-            "Khác", 
-            "Phường Linh Xuân", "Phường Bình Chiểu", "Phường Linh Trung", "Phường Tam Bình", "Phường Tam Phú", 
-            "Phường Hiệp Bình Phước", "Phường Hiệp Bình Chánh", "Phường Linh Chiểu", "Phường Linh Tây", "Phường Linh Đông", 
-            "Phường Bình Thọ", "Phường Trường Thọ", "Phường Long Bình", "Phường Long Thạnh Mỹ", "Phường Tân Phú", 
-            "Phường Hiệp Phú", "Phường Tăng Nhơn Phú A", "Phường Tăng Nhơn Phú B", "Phường Phước Long B", "Phường Phước Long A", 
-            "Phường Trường Thạnh", "Phường Long Phước", "Phường Long Trường", "Phường Phước Bình", "Phường Phú Hữu", 
-            "Phường Thảo Điền", "Phường An Phú", "Phường An Khánh", "Phường Bình Trưng Đông", "Phường Bình Trưng Tây", 
+            "Khác",
+            "Phường Linh Xuân", "Phường Bình Chiểu", "Phường Linh Trung", "Phường Tam Bình", "Phường Tam Phú",
+            "Phường Hiệp Bình Phước", "Phường Hiệp Bình Chánh", "Phường Linh Chiểu", "Phường Linh Tây", "Phường Linh Đông",
+            "Phường Bình Thọ", "Phường Trường Thọ", "Phường Long Bình", "Phường Long Thạnh Mỹ", "Phường Tân Phú",
+            "Phường Hiệp Phú", "Phường Tăng Nhơn Phú A", "Phường Tăng Nhơn Phú B", "Phường Phước Long B", "Phường Phước Long A",
+            "Phường Trường Thạnh", "Phường Long Phước", "Phường Long Trường", "Phường Phước Bình", "Phường Phú Hữu",
+            "Phường Thảo Điền", "Phường An Phú", "Phường An Khánh", "Phường Bình Trưng Đông", "Phường Bình Trưng Tây",
             "Phường Cát Lái", "Phường Thạnh Mỹ Lợi", "Phường An Lợi Đông", "Phường Thủ Thiêm"
         ],
 
@@ -234,7 +254,7 @@ $(document).ready(function () {
             dia_chi_day_du = dc3Select.value + ", " + dc2Select.value + ", " + dc_1;
             let diaChiInput = document.querySelector('input[name="dia_chi"]');
             diaChiInput.value = dia_chi_day_du;
-        } else if (dc2Select.value !== "none" && dc2Select.value !== "Khác"  && dc2Select.value !== "") {
+        } else if (dc2Select.value !== "none" && dc2Select.value !== "Khác" && dc2Select.value !== "") {
             dia_chi_day_du = dc2Select.value + ", " + dc_1;
             let diaChiInput = document.querySelector('input[name="dia_chi"]');
             diaChiInput.value = dia_chi_day_du;
@@ -416,13 +436,17 @@ $(document).ready(function () {
                             document.getElementsByName("dia_chi")[0].value = value[2];
                             dc_update(value[3], value[4], value[5]);
                             document.getElementsByName("so_dien_thoai")[0].value = value[6];
-                            
+
                         }
                         else {
                             BtnAdd();
                             document.getElementsByName("ho_va_ten")[i].value = value[8];
                             document.getElementsByName("gioi_tinh")[i].value = value[9];
-                            document.getElementsByName("tuoi")[i].value = namHienTai - value[10] + 1;
+                            let tuoi = namHienTai - value[10] + 1;
+                            if (tuoi < 0 || tuoi > 150) {
+                                tuoi = "";
+                            }
+                            document.getElementsByName("tuoi")[i].value = tuoi;
                             document.getElementsByName("nguoi_sanh")[i].value = value[11];
                         }
                         i = i + 1;
@@ -565,13 +589,13 @@ function getHan(gioiTinh, tuoi) {
             return "Toán Tận";
         } else if ([15, 24, 33, 42, 51, 59, 60, 68, 77, 86, 95].includes(tuoi)) {
             return "Thiên La";
-        } else if ([16, 25, 34, 43, 52, 61, 60, 69 ,70, 78, 87, 96].includes(tuoi)) {
+        } else if ([16, 25, 34, 43, 52, 61, 60, 69, 70, 78, 87, 96].includes(tuoi)) {
             return "Địa Võng";
         } else if ([17, 26, 35, 44, 53, 62, 71, 79, 80, 88, 97].includes(tuoi)) {
             return "Diêm Vương";
         }
     } else if (gioiTinh === 'Nữ') {
-        if        ([10, 18, 27, 36, 45, 54, 63, 72, 81, 89, 90].includes(tuoi)) {
+        if ([10, 18, 27, 36, 45, 54, 63, 72, 81, 89, 90].includes(tuoi)) {
             return "Toán Tận";
         } else if ([11, 19, 20, 28, 37, 46, 55, 64, 73, 82, 91].includes(tuoi)) {
             return "Thiên Tinh";
@@ -637,8 +661,8 @@ function isTuoiHopLe(tuoi) {
 }
 
 function checkTamTai(currentYear, yearOfBirth, tuoi) {
-    if ((currentYear - yearOfBirth + 1) < 10){
-        return""
+    if ((currentYear - yearOfBirth + 1) < 10) {
+        return ""
     }
     const zodiacs = [
         "Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ",
@@ -647,7 +671,7 @@ function checkTamTai(currentYear, yearOfBirth, tuoi) {
     const startYear = 1900;
     var indexY = (yearOfBirth - startYear) % 12;
     const zodiac = zodiacs[indexY];
-    
+
     var indexCY = (currentYear - startYear) % 12;
     const currentZodiac = zodiacs[indexCY];
     //Thân Tý Thìn
@@ -683,10 +707,10 @@ function checkTamTai(currentYear, yearOfBirth, tuoi) {
     }
 
     return ""
-}  
+}
 
 
-function tickPrint(listMaSo){
+function tickPrint(listMaSo) {
     var numberOfRequests = listMaSo.length;
     var completedRequests = 0;
     while (completedRequests < numberOfRequests) {
@@ -931,7 +955,7 @@ function generatePDF(listMaSo) {
         }
         var maSo = listMaSo[index];
 
-        
+
 
         $.getJSON(AppsScriptLink + "?page=search&no=" + maSo, function (dataAPI) {
             if (dataAPI == "NOT FOUND") {
@@ -950,6 +974,9 @@ function generatePDF(listMaSo) {
                         nguoiDaiDien = value[1];
                         diaChi = value[2];
                         soDienThoai = value[6];
+                        if (soDienThoai === "none") {
+                            soDienThoai = "";
+                        }
                     } else {
                         var rowData = [];
                         rowData.push(i);
@@ -959,6 +986,9 @@ function generatePDF(listMaSo) {
                         rowData.push(value[11]);//Ngươi sanh
 
                         let tuoi = namHienTai - value[10] + 1;//Năm sinh
+                        if (tuoi < 0 || tuoi > 150) {
+                            tuoi = "";
+                        }
                         rowData.push(tuoi);
 
                         let gioiTinh = value[9];//Giới tính
