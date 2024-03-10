@@ -20,13 +20,13 @@ function doPost(e) {
   if (dc1 === "Khác") {
     DiaChi = formatFirstLetterUppercase(DiaChi);
   }
-  
+
   let SoDienThoai = SaoHan.so_dien_thoai[0] ? `'${SaoHan.so_dien_thoai[0]}` : 'none';
   let ThemMoi = SaoHan.ThemMoi;
 
   if (ThemMoi == 'Y') {
     let table = SaoHanSheet.getRange("A:A").getValues().filter(Number);
-    let MaSo = Math.max(...table) + 1 ;
+    let MaSo = Math.max(...table) + 1;
     SaoHanSheet.appendRow([MaSo, DaiDien, DiaChi, dc1, dc2, dc3, SoDienThoai, "Chưa in"]);
     for (let index = 1; index < HoVaTen.length; index++) {
       let HoVaTenValue = HoVaTen[index];
@@ -34,7 +34,7 @@ function doPost(e) {
       let NamSinhValue = NamHienTai - SaoHan.tuoi[index] + 1;
       let NguoiSanhValue = SaoHan.nguoi_sanh[index];
       if (HoVaTenValue !== "" && GioiTinhValue !== "" && NamSinhValue !== "" && NguoiSanhValue !== "") {
-        SaoHanSheet.appendRow(["", "", "", "", "", "", "", "", HoVaTenValue, GioiTinhValue , NamSinhValue, NguoiSanhValue]);
+        SaoHanSheet.appendRow(["", "", "", "", "", "", "", "", HoVaTenValue, GioiTinhValue, NamSinhValue, NguoiSanhValue]);
       }
     }
   }
@@ -42,7 +42,7 @@ function doPost(e) {
     SaoHanSheet.getRange(SaoHan.StartRow, 1, 1, 8).setValues([[SaoHan.ma_so[0], DaiDien, DiaChi, dc1, dc2, dc3, SoDienThoai, "Chưa in"]]);
     let NextRow = SaoHan.StartRow;
     let DeleteRow = +SaoHan.StartRow + 1;
-    SaoHanSheet.deleteRows(DeleteRow, SaoHan.RowCount-1);
+    SaoHanSheet.deleteRows(DeleteRow, SaoHan.RowCount - 1);
     for (let index = 1; index < HoVaTen.length; index++) {
       let HoVaTenValue = HoVaTen[index];
       let GioiTinhValue = SaoHan.gioi_tinh[index];
@@ -51,7 +51,7 @@ function doPost(e) {
       if (HoVaTenValue !== "" && GioiTinhValue !== "" && NamSinhValue !== "" && NguoiSanhValue !== "") {
         NextRow++;
         SaoHanSheet.insertRows(NextRow, 1);
-        SaoHanSheet.getRange(NextRow, 1, 1, 12).setValues([["", "", "", "", "", "", "", "", HoVaTenValue, GioiTinhValue , NamSinhValue, NguoiSanhValue]]);
+        SaoHanSheet.getRange(NextRow, 1, 1, 12).setValues([["", "", "", "", "", "", "", "", HoVaTenValue, GioiTinhValue, NamSinhValue, NguoiSanhValue]]);
       }
     }
   }
@@ -61,10 +61,10 @@ function doPost(e) {
 
 function doGet(e) {
   let page = e.parameter.page;
-  
+
   // Trường hợp không có trang hoặc trang không xác định
-  if (page == null || page == undefined) {                      
-    let table = SaoHanSheet.getRange("A:H").getValues().filter(r=>r.every(Boolean));
+  if (page == null || page == undefined) {
+    let table = SaoHanSheet.getRange("A:H").getValues().filter(r => r.every(Boolean));
     let str = JSON.stringify(table);
     return ContentService.createTextOutput(str);
   }
@@ -74,7 +74,7 @@ function doGet(e) {
     let myMax = Math.max(...table);
     return ContentService.createTextOutput(myMax);
   }
-  
+
   if (page == 'search') {
     // Tìm kiếm dữ liệu dựa trên số
     let no = e.parameter.no;
@@ -112,9 +112,9 @@ function doGet(e) {
     }
   }
   else if (page == 'all') {
-       // Lấy toàn bộ dữ liệu từ bảng
-       let table = SaoHanSheet.getRange("A:H").getValues().filter(r=>r.every(Boolean));
-       let str = JSON.stringify(table);
-       return ContentService.createTextOutput(str); 
+    // Lấy toàn bộ dữ liệu từ bảng
+    let table = SaoHanSheet.getRange("A:H").getValues().filter(r => r.every(Boolean));
+    let str = JSON.stringify(table);
+    return ContentService.createTextOutput(str);
   }
 }
