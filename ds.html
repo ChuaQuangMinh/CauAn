@@ -266,11 +266,18 @@
         });
         hideLoadingOverlay();
       });
+
+      // Hàm chuyển đổi chuỗi sang dạng không dấu
+      function removeDiacritics(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
       
       // Xử lý tìm kiếm
+
+        
       $("input[name='tim_kiem']").on("keyup", function () {
-        const searchText = $(this).val().trim().toLowerCase(); // Lấy giá trị tìm kiếm
-        let addressSet = new Set(); // Tạo một tập hợp để lưu các địa chỉ duy nhất
+        const searchText = removeDiacritics($(this).val().trim().toLowerCase()); // Lấy giá trị tìm kiếm không dấu
+        let addressSet = new Set(); // Tạo tập hợp để lưu các địa chỉ duy nhất
         let hasResults = false;
 
         // Kiểm tra nếu ô tìm kiếm rỗng
@@ -283,13 +290,13 @@
 
         // Lặp qua từng dòng dữ liệu
         $("#TBody tr").each(function () {
-          const rowData = $(this).text().toLowerCase(); // Nội dung dòng hiện tại
-          const rowAddress = $(this).find(".dia_chi").text(); // Địa chỉ giữ nguyên giá trị gốc
+          const rowData = removeDiacritics($(this).text().toLowerCase()); // Nội dung dòng hiện tại không dấu
+          const rowAddress = $(this).find(".dia_chi").text(); // Địa chỉ giữ nguyên
 
-          // Kiểm tra từ khóa có trong nội dung dòng
+          // Kiểm tra từ khóa có trong nội dung dòng (so sánh không dấu)
           if (rowData.indexOf(searchText) !== -1) {
             $(this).show(); // Hiển thị dòng nếu khớp
-            addressSet.add(rowAddress); // Thêm địa chỉ vào tập hợp (giữ nguyên giá trị gốc)
+            addressSet.add(rowAddress); // Thêm địa chỉ vào tập hợp
             hasResults = true;
           } else {
             $(this).hide(); // Ẩn dòng nếu không khớp
@@ -329,15 +336,15 @@
 
       // Khi người dùng chọn một địa chỉ từ dropdown
       $("#dynamicAddressFilter").on("change", function () {
-        const selectedAddress = $(this).val(); // Địa chỉ được chọn (giữ nguyên giá trị gốc)
-        const searchText = $("input[name='tim_kiem']").val().trim().toLowerCase(); // Từ khóa tìm kiếm
+        const selectedAddress = $(this).val(); // Địa chỉ được chọn
+        const searchText = removeDiacritics($("input[name='tim_kiem']").val().trim().toLowerCase()); // Từ khóa tìm kiếm không dấu
 
         let hasResults = false;
 
         // Lặp qua từng dòng dữ liệu
         $("#TBody tr").each(function () {
-          const rowData = $(this).text().toLowerCase(); // Nội dung dòng hiện tại
-          const rowAddress = $(this).find(".dia_chi").text(); // Địa chỉ giữ nguyên giá trị gốc
+          const rowData = removeDiacritics($(this).text().toLowerCase()); // Nội dung dòng hiện tại không dấu
+          const rowAddress = $(this).find(".dia_chi").text(); // Địa chỉ giữ nguyên
 
           // Kiểm tra từ khóa và địa chỉ
           const isMatch =
@@ -359,10 +366,6 @@
           $("#noResults").hide();
         }
       });
-
-
-
-
 
       // Mảng lưu trữ các hàng đã chọn
       var selectedRows = [];
