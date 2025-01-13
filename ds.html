@@ -130,14 +130,13 @@
                 </div>
               </td> -->
               <td class="custom-td">
-                <a href="" class="btn btn-sm btn-primary mb-1"><i class="bi bi-pencil"></i></a>
-                <button class="btn btn-sm btn-success print-button mb-1" data-ma-so="your_ma_so_here"><i
-                    class="bi bi-printer"></i></button>
+                <!-- <a href="" class="btn btn-sm btn-info mb-1 view-button"><i class="bi bi-eye"></i></a>
+                <a href="" class="btn btn-sm btn-primary mb-1 edit-button"><i class="bi bi-pencil"></i></a> -->
+                <button class="btn btn-sm btn-success print-button mb-1" data-ma-so="your_ma_so_here"><i class="bi bi-printer"></i></button>
                 <button class="btn btn-sm btn-secondary check-button mb-1" data-ma-so="your_ma_so_here">
                   <i class="bi bi-check"></i>
                 </button>
-                <!-- <button class="btn btn-sm btn-danger mb-1" data-ma-so="your_ma_so_here"><i class="bi bi-trash"></i></button> -->
-              </td>
+              </td>              
             </tr>
           </tbody>
         </table>
@@ -188,8 +187,17 @@
           } else if (trangThai === "R") {
             $row.find(".trang_thai").text("Đã Viết Giấy").addClass("da_in");
           }
-          var maSoLink = "index.html?ma_so=" + value[0];
-          $row.find("a.btn-primary").attr("href", maSoLink);
+          
+          // Thêm nút View với status=view
+          var maSoViewLink = "index.html?ma_so=" + value[0] + "&status=view";
+          var viewButton = `<a href="${maSoViewLink}" class="btn btn-sm btn-info mb-1 view-button"><i class="bi bi-eye"></i></a>`;
+          $row.find(".custom-td").append(viewButton);
+
+          // Thêm nút Edit với status=edit
+          var maSoEditLink = "index.html?ma_so=" + value[0] + "&status=edit";
+          var editButton = `<a href="${maSoEditLink}" class="btn btn-sm btn-primary mb-1 edit-button"><i class="bi bi-pencil"></i></a>`;
+          $row.find(".custom-td").append(editButton);
+
           var $printButton = $row.find("button.print-button");
           $printButton.attr("data-ma-so", value[0]); // Set the data-ma-so attribute
           $printButton.on("click", function () {

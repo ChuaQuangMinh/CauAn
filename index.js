@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbzUx7Wcv0IrshnDbJurYIFJrCcl80V3-FoVepuiWmvuk_upRpA_xppRZQj9rKyfaoUOPg/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbzvHU2FJlf3Q1V0USzRN1vGMrff2PlH7-5C3UpXShLFSBPVkqHi95chQvSt3wdDrvbT6g/exec";
 
 function loadJSON(file, callback) {
     var xobj = new XMLHttpRequest();
@@ -12,7 +12,56 @@ function loadJSON(file, callback) {
     xobj.send(null);
 }
 
-const namHienTai = 2024;
+$(document).ready(function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+  
+    if (status === 'view') {
+        // Ẩn toàn bộ thẻ <th> chứa nút thêm hàng
+        document.querySelector("th[scope='col'] button.btn-success").closest("th").style.display = "none";
+
+        // Ẩn các nút trong cột "NoPrint"
+        document.querySelectorAll("td.NoPrint").forEach(function (td) {
+            td.style.display = "none";
+
+        });
+
+        // Ẩn nút "Thêm thành viên"
+        document.querySelector("button.btn-success[onclick='BtnAdd()']").style.display = "none";
+
+        // Ẩn toàn bộ card-footer
+        document.querySelector(".card-footer.text-center").style.display = "none";
+
+
+      // Disable all form inputs, selects, and textareas
+      $('input, select, textarea').prop('disabled', true);
+  
+      // Disable all buttons except buttons that navigate (like back or home buttons)
+      $('button').prop('disabled', true);
+  
+      // Optionally, hide "Lưu", "Tạo mới", và "In giấy" buttons
+      $('#submitButton, #createNewButton, #printButton').hide();
+  
+      // Add some styles for the overlay
+      $('#readOnlyOverlay').css({
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 10000,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: '24px',
+        color: '#333',
+        fontWeight: 'bold',
+      });
+    }
+  });
+  
+
+const namHienTai = 2025;
 function BtnMoveUp(v) {
     var currentRow = $(v).closest('tr');
     var prevRow = currentRow.prev('tr');
@@ -53,12 +102,27 @@ function BtnDel(v) {
 
 
 
-function MaxInv() {
+function MaxInv(dc_1, dc_2, dc_3) {
     $.getJSON(AppsScriptLink + "?page=max",
         function (data) {
+            // alert("Mã số lớn nhất: " + data); // Hiển thị giá trị trả về từ server
             $("input[name='ma_so']").val(data);
         });
 }
+
+function SET() {
+    // Gửi yêu cầu GET tới Apps Script với page = "set"
+    $.getJSON(AppsScriptLink + "?page=set",
+        function (data) {
+            // Hiển thị thông báo thành công
+            alert("Cập nhật mã số thành công!");
+        }).fail(function (jqxhr, textStatus, error) {
+            // Hiển thị thông báo nếu có lỗi
+            let err = textStatus + ", " + error;
+            alert("Yêu cầu thất bại: " + err);
+        });
+}
+
 
 
 
@@ -262,8 +326,8 @@ $(document).ready(function () {
             dia_chi_day_du = dc_1;
             let diaChiInput = document.querySelector('input[name="dia_chi"]');
 
-            alert("3");
-            alert(dia_chi_day_du);
+            // alert("3");
+            // alert(dia_chi_day_du);
 
             diaChiInput.value = dia_chi_day_du;
         }
@@ -485,7 +549,8 @@ $(document).ready(function () {
                             $('#RowCount').val(RowCount);
                         });
                 } else {
-                    MaxInv();
+                    // alert("MAX");
+                    MaxInv(dc1Select.value, dc2Select.value, dc3Select.value);
                 }
                 spinner.addClass("d-none");
                 submitButton.prop("disabled", false);
@@ -825,7 +890,7 @@ function generatePDF(listMaSo) {
         doc.setFont('Tinos', 'B');
         doc.setFontSize(14);
         doc.setTextColor(56, 84, 146);
-        doc.text(190, 52, "Năm: Giáp Thìn " + year);
+        doc.text(190, 52, "Năm: Ất Tỵ " + year);
 
         //set footer
         doc.setFont('Tinos', 'BI');
