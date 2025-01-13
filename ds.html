@@ -133,7 +133,7 @@
                 </div>
                 <!-- Vùng hiển thị danh sách thành viên -->
                 <div class="mt-3">
-                  <h6 class="fw-bold">Danh sách thành viên:</h6>
+                  <!-- <h6 class="fw-bold">Danh sách thành viên:</h6> -->
                   <ul class="thanh_vien"></ul>
                 </div>
               </td>
@@ -207,17 +207,19 @@
           // Hiển thị danh sách thành viên
           var memberList = $row.find(".thanh_vien");
           if (value.thanhVien && value.thanhVien.length > 0) {
-            value.thanhVien.forEach(function (member) {
+            value.thanhVien.forEach(function (member, index) {
               memberList.append(`
-                <li>
-                  <strong>${member.hoVaTen}</strong>
-                </li>
+                <div>
+                  ${index + 1}. <strong>${member.hoVaTen}</strong> 
+                  <span style="color: red;">(${namHienTai - member.namSinh + 1}t)</span> 
+                  <em>${member.nguoiSinh}</em>
+                </div>
               `);
             });
           } else {
-            memberList.append(`<li>Không có thông tin thành viên</li>`);
+            memberList.append(`<div>Không có thông tin thành viên</div>`);
           }
-          
+
           // Thêm nút View với status=view
           var maSoViewLink = "index.html?ma_so=" + value.maSo + "&status=view";
           var viewButton = `<a href="${maSoViewLink}" class="btn btn-sm btn-info mb-1 view-button"><i class="bi bi-eye"></i></a>`;

@@ -1,3 +1,9 @@
+.thanh_vien {
+    list-style-type: none; /* Loại bỏ dấu chấm */
+    padding-left: 0; /* Loại bỏ thụt vào từ padding */
+    margin-left: 0; /* Loại bỏ thụt vào từ margin */
+  }
+  
 .input-group-text {
     width: 85px;
 }
