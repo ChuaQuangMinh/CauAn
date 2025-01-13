@@ -55,7 +55,15 @@
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Tìm kiếm" name="tim_kiem">
           </div>
-        </div>        
+        </div>
+        <div class="col-md-4">
+          <div class="input-group mb-3">
+            <select class="form-select" id="dynamicAddressFilter">
+              <option value="">Chọn địa chỉ</option>
+            </select>
+          </div>
+        </div>
+              
         <div class="col-md-2">
           <button class="btn btn-sm btn-success mb-1 print-selected"><i class="bi bi-printer"></i> In tất cả đã
             chọn</button>
@@ -258,25 +266,31 @@
         });
         hideLoadingOverlay();
       });
+      
       // Xử lý tìm kiếm
+      // Khi người dùng nhập vào ô tìm kiếm
       $("input[name='tim_kiem']").on("keyup", function () {
-        var searchText = $(this).val().toLowerCase();
-        var hasResults = false;
+        const searchText = $(this).val().trim().toLowerCase(); // Lấy giá trị tìm kiếm
+        let addressSet = new Set(); // Tạo một tập hợp để lưu các địa chỉ duy nhất
+        let hasResults = false;
 
         // Kiểm tra nếu ô tìm kiếm rỗng
         if (searchText === "") {
           $("#TBody tr").hide(); // Ẩn tất cả các dòng nếu không có từ khóa
           $("#noResults").hide(); // Ẩn thông báo "Không tìm thấy kết quả"
+          $("#dynamicAddressFilter").html(`<option value="">Chọn địa chỉ</option>`); // Reset dropdown
           return; // Dừng tại đây
         }
 
         // Lặp qua từng dòng dữ liệu
         $("#TBody tr").each(function () {
-          var rowData = $(this).text().toLowerCase();
+          const rowData = $(this).text().toLowerCase(); // Nội dung dòng hiện tại
+          const rowAddress = $(this).find(".dia_chi").text().toLowerCase(); // Địa chỉ của dòng hiện tại
 
           // Kiểm tra từ khóa có trong nội dung dòng
           if (rowData.indexOf(searchText) !== -1) {
-            $(this).show(); // Hiện dòng nếu khớp
+            $(this).show(); // Hiển thị dòng nếu khớp
+            addressSet.add(rowAddress); // Thêm địa chỉ vào tập hợp
             hasResults = true;
           } else {
             $(this).hide(); // Ẩn dòng nếu không khớp
@@ -289,7 +303,48 @@
         } else {
           $("#noResults").hide();
         }
+
+        // Cập nhật danh sách địa chỉ trong dropdown
+        const $dropdown = $("#dynamicAddressFilter");
+        $dropdown.html(`<option value="">Chọn địa chỉ</option>`); // Reset dropdown
+        addressSet.forEach((address) => {
+          $dropdown.append(`<option value="${address}">${address}</option>`);
+        });
       });
+
+      // Khi người dùng chọn một địa chỉ từ dropdown
+      $("#dynamicAddressFilter").on("change", function () {
+        const selectedAddress = $(this).val().toLowerCase(); // Địa chỉ được chọn
+        const searchText = $("input[name='tim_kiem']").val().trim().toLowerCase(); // Từ khóa tìm kiếm
+
+        let hasResults = false;
+
+        // Lặp qua từng dòng dữ liệu
+        $("#TBody tr").each(function () {
+          const rowData = $(this).text().toLowerCase(); // Nội dung dòng hiện tại
+          const rowAddress = $(this).find(".dia_chi").text().toLowerCase(); // Địa chỉ của dòng hiện tại
+
+          // Kiểm tra từ khóa và địa chỉ
+          const isMatch =
+            (searchText === "" || rowData.indexOf(searchText) !== -1) &&
+            (selectedAddress === "" || rowAddress === selectedAddress);
+
+          if (isMatch) {
+            $(this).show(); // Hiển thị dòng nếu khớp
+            hasResults = true;
+          } else {
+            $(this).hide(); // Ẩn dòng nếu không khớp
+          }
+        });
+
+        // Hiển thị thông báo nếu không có kết quả
+        if (!hasResults) {
+          $("#noResults").show();
+        } else {
+          $("#noResults").hide();
+        }
+      });
+
 
 
       // Mảng lưu trữ các hàng đã chọn
