@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbxAOdjd3sRQxNQ4wQcxFb_jv0_mL6b-S4wgScRW0lQh6FdSszwVTJg5J0FcG43rXkCRzw/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbzqJnxBjy9vDi7G6n1UfKCrowIF0x1-EEuSxUhVItLcbk4townOLCG79wX-i47Cf0C10Q/exec";
 
 function loadJSON(file, callback) {
     var xobj = new XMLHttpRequest();
