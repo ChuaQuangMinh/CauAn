@@ -239,13 +239,51 @@ function doGet(e) {
       return ContentService.createTextOutput(str);
     }
   }
+  // else if (page == 'all') {
+  //      // Lấy toàn bộ dữ liệu từ bảng
+  //      let table = SaoHanSheet.getRange("A:H").getValues().filter(r=>r.every(Boolean));
+  //      let str = JSON.stringify(table);
+  //      return ContentService.createTextOutput(str); 
+  // }
   else if (page == 'all') {
-       // Lấy toàn bộ dữ liệu từ bảng
-       let table = SaoHanSheet.getRange("A:H").getValues().filter(r=>r.every(Boolean));
-       let str = JSON.stringify(table);
-       return ContentService.createTextOutput(str); 
-  }
-  else if (page == "set") {
+    // Lấy toàn bộ dữ liệu từ bảng
+    let data = SaoHanSheet.getRange("A:L").getValues();
+
+    // Mảng để lưu kết quả
+    let result = [];
+    let currentMain = null;
+
+    // Duyệt qua từng dòng
+    data.forEach(row => {
+        if (row[0] !== "" && row[0] !== null) {
+            // Nếu dòng có mã số, khởi tạo một đối tượng mới
+            currentMain = {
+                maSo: row[0], // Mã số
+                daiDien: row[1], // Đại diện
+                diaChi: row[2], // Địa chỉ
+                dc1: row[3],
+                dc2: row[4],
+                dc3: row[5],
+                soDienThoai: row[6],
+                trangThai: row[7],
+                thanhVien: [] // Danh sách thành viên
+            };
+            result.push(currentMain); // Thêm vào mảng kết quả
+        } else if (currentMain && row[8] !== "" && row[8] !== null) {
+            // Nếu dòng không có mã số, thêm vào danh sách thành viên
+            currentMain.thanhVien.push({
+                hoVaTen: row[8], // Họ và tên
+                gioiTinh: row[9], // Giới tính
+                namSinh: row[10], // Năm sinh
+                nguoiSinh: row[11] // Ngươi sanh
+            });
+        }
+    });
+
+    // Chuyển mảng thành JSON và trả về
+    let str = JSON.stringify(result);
+    return ContentService.createTextOutput(str);
+  } else if (page == "set") {
     // Lấy toàn bộ dữ liệu từ bảng (cột A đến cột F)
     let data = SaoHanSheet.getRange("A:F").getValues();
 

@@ -55,7 +55,7 @@
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Tìm kiếm" name="tim_kiem">
           </div>
-        </div>
+        </div>        
         <div class="col-md-2">
           <button class="btn btn-sm btn-success mb-1 print-selected"><i class="bi bi-printer"></i> In tất cả đã
             chọn</button>
@@ -123,6 +123,11 @@
                     </div>
                   </div>
                 </div>
+                <!-- Vùng hiển thị danh sách thành viên -->
+                <div class="mt-3">
+                  <h6 class="fw-bold">Danh sách thành viên:</h6>
+                  <ul class="thanh_vien"></ul>
+                </div>
               </td>
               <!-- <td class="custom-td">
                 <div class="form-check">
@@ -139,6 +144,9 @@
               </td>              
             </tr>
           </tbody>
+          <div id="noResults" class="text-center text-muted mt-3" style="display: none;">
+            Không tìm thấy kết quả phù hợp.
+          </div>
         </table>
       </div>
 
@@ -172,41 +180,55 @@
       // });
       $(".print-selected").hide();
       showLoadingOverlay();
-      $.getJSON(AppsScriptLink, function (data) {
+      $.getJSON(AppsScriptLink + "?page=all", function (data) {
         data.shift();
         $.each(data, function (key, value) {
+          // console.log("Phần tử JSON hiện tại:", value); // In từng phần tử JSON
           var $row = $("#TRow").clone().removeClass('d-none'); // Clone the hidden row
-          $row.find(".ma_so").text(value[0]);
-          $row.find(".dai_dien").text(value[1]);
-          $row.find(".dia_chi").text(value[2]);
-          $row.find(".so_dien_thoai").text(value[6]);
-          var trangThai = value[7];
+          $row.find(".ma_so").text(value.maSo);
+          $row.find(".dai_dien").text(value.daiDien);
+          $row.find(".dia_chi").text(value.diaChi);
+          $row.find(".so_dien_thoai").text(value.soDienThoai);
+          var trangThai = value.trangThai;
           $row.find(".trang_thai").text(trangThai);
           if (trangThai === "Chưa in") {
-            $row.find(".trang_thai").text("Chưa Viết Giấy").addClass("chua_in");
+            $row.find(".trang_thai").text("Chưa Biên Giấy").addClass("chua_in");
           } else if (trangThai === "R") {
-            $row.find(".trang_thai").text("Đã Viết Giấy").addClass("da_in");
+            $row.find(".trang_thai").text("Đã Biên Giấy").addClass("da_in");
+          }
+          // Hiển thị danh sách thành viên
+          var memberList = $row.find(".thanh_vien");
+          if (value.thanhVien && value.thanhVien.length > 0) {
+            value.thanhVien.forEach(function (member) {
+              memberList.append(`
+                <li>
+                  <strong>${member.hoVaTen}</strong>
+                </li>
+              `);
+            });
+          } else {
+            memberList.append(`<li>Không có thông tin thành viên</li>`);
           }
           
           // Thêm nút View với status=view
-          var maSoViewLink = "index.html?ma_so=" + value[0] + "&status=view";
+          var maSoViewLink = "index.html?ma_so=" + value.maSo + "&status=view";
           var viewButton = `<a href="${maSoViewLink}" class="btn btn-sm btn-info mb-1 view-button"><i class="bi bi-eye"></i></a>`;
           $row.find(".custom-td").append(viewButton);
 
           // Thêm nút Edit với status=edit
-          var maSoEditLink = "index.html?ma_so=" + value[0] + "&status=edit";
+          var maSoEditLink = "index.html?ma_so=" + value.maSo + "&status=edit";
           var editButton = `<a href="${maSoEditLink}" class="btn btn-sm btn-primary mb-1 edit-button"><i class="bi bi-pencil"></i></a>`;
           $row.find(".custom-td").append(editButton);
 
           var $printButton = $row.find("button.print-button");
-          $printButton.attr("data-ma-so", value[0]); // Set the data-ma-so attribute
+          $printButton.attr("data-ma-so", value.maSo); // Set the data-ma-so attribute
           $printButton.on("click", function () {
             var maSo = $(this).data('ma-so'); // Lấy giá trị data-ma-so
             showLoadingOverlay();
             generatePDF([maSo]); // Gọi hàm generatePDF với mã số
           });
           var $checkButton = $row.find("button.check-button");
-          $checkButton.attr("data-ma-so", value[0]); // Set the data-ma-so attribute
+          $checkButton.attr("data-ma-so", value.maSo); // Set the data-ma-so attribute
           $checkButton.on("click", function () {
             var maSo = $(this).data('ma-so');
             tickPrint([maSo]);
@@ -229,30 +251,46 @@
           });
 
           $("#TBody").append($row); // Append the row to the table body
+
+          // Ẩn dòng này sau khi thêm
+          $row.hide(); // Ẩn toàn bộ dòng ngay sau khi thêm vào bảng
+          $("#TBody").append($row); // Append the row to the table body
         });
         hideLoadingOverlay();
       });
-      // Lấy giá trị của ô tìm kiếm khi nó thay đổi
+      // Xử lý tìm kiếm
       $("input[name='tim_kiem']").on("keyup", function () {
         var searchText = $(this).val().toLowerCase();
+        var hasResults = false;
+
+        // Kiểm tra nếu ô tìm kiếm rỗng
+        if (searchText === "") {
+          $("#TBody tr").hide(); // Ẩn tất cả các dòng nếu không có từ khóa
+          $("#noResults").hide(); // Ẩn thông báo "Không tìm thấy kết quả"
+          return; // Dừng tại đây
+        }
 
         // Lặp qua từng dòng dữ liệu
         $("#TBody tr").each(function () {
           var rowData = $(this).text().toLowerCase();
 
-          // Lấy nội dung của các phần tử có class 'd-none' và bao gồm vào biến rowData
-          $(this).find('.d-none').each(function () {
-            rowData += $(this).text().toLowerCase();
-          });
-
-          // Tìm kiếm trong dữ liệu của từng dòng
-          if (rowData.indexOf(searchText) === -1) {
-            $(this).hide();
+          // Kiểm tra từ khóa có trong nội dung dòng
+          if (rowData.indexOf(searchText) !== -1) {
+            $(this).show(); // Hiện dòng nếu khớp
+            hasResults = true;
           } else {
-            $(this).show();
+            $(this).hide(); // Ẩn dòng nếu không khớp
           }
         });
+
+        // Hiển thị thông báo "Không tìm thấy kết quả" nếu không có dòng nào khớp
+        if (!hasResults) {
+          $("#noResults").show();
+        } else {
+          $("#noResults").hide();
+        }
       });
+
 
       // Mảng lưu trữ các hàng đã chọn
       var selectedRows = [];
