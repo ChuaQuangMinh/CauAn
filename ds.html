@@ -53,7 +53,7 @@
       <div class="row">
         <div class="col-md-4">
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Tìm kiếm" name="tim_kiem">
+            <input type="text" class="form-control" placeholder="Tìm kiếm" name="tim_kiem" autocomplete="off">
           </div>
         </div>
         <div class="col-md-4">
@@ -268,7 +268,6 @@
       });
       
       // Xử lý tìm kiếm
-      // Khi người dùng nhập vào ô tìm kiếm
       $("input[name='tim_kiem']").on("keyup", function () {
         const searchText = $(this).val().trim().toLowerCase(); // Lấy giá trị tìm kiếm
         let addressSet = new Set(); // Tạo một tập hợp để lưu các địa chỉ duy nhất
@@ -285,12 +284,12 @@
         // Lặp qua từng dòng dữ liệu
         $("#TBody tr").each(function () {
           const rowData = $(this).text().toLowerCase(); // Nội dung dòng hiện tại
-          const rowAddress = $(this).find(".dia_chi").text().toLowerCase(); // Địa chỉ của dòng hiện tại
+          const rowAddress = $(this).find(".dia_chi").text(); // Địa chỉ giữ nguyên giá trị gốc
 
           // Kiểm tra từ khóa có trong nội dung dòng
           if (rowData.indexOf(searchText) !== -1) {
             $(this).show(); // Hiển thị dòng nếu khớp
-            addressSet.add(rowAddress); // Thêm địa chỉ vào tập hợp
+            addressSet.add(rowAddress); // Thêm địa chỉ vào tập hợp (giữ nguyên giá trị gốc)
             hasResults = true;
           } else {
             $(this).hide(); // Ẩn dòng nếu không khớp
@@ -304,17 +303,33 @@
           $("#noResults").hide();
         }
 
+        // Sắp xếp danh sách địa chỉ
+        const sortedAddresses = Array.from(addressSet).sort((a, b) => {
+          const aParts = a.split(',').reverse();
+          const bParts = b.split(',').reverse();
+
+          while (aParts.length < 3) aParts.push("");
+          while (bParts.length < 3) bParts.push("");
+
+          for (let i = 0; i < 3; i++) {
+            if (aParts[i].trim() !== bParts[i].trim()) {
+              return aParts[i].trim().localeCompare(bParts[i].trim());
+            }
+          }
+          return 0;
+        });
+
         // Cập nhật danh sách địa chỉ trong dropdown
         const $dropdown = $("#dynamicAddressFilter");
         $dropdown.html(`<option value="">Chọn địa chỉ</option>`); // Reset dropdown
-        addressSet.forEach((address) => {
-          $dropdown.append(`<option value="${address}">${address}</option>`);
+        sortedAddresses.forEach((address) => {
+          $dropdown.append(`<option value="${address}">${address}</option>`); // Giữ nguyên giá trị gốc
         });
       });
 
       // Khi người dùng chọn một địa chỉ từ dropdown
       $("#dynamicAddressFilter").on("change", function () {
-        const selectedAddress = $(this).val().toLowerCase(); // Địa chỉ được chọn
+        const selectedAddress = $(this).val(); // Địa chỉ được chọn (giữ nguyên giá trị gốc)
         const searchText = $("input[name='tim_kiem']").val().trim().toLowerCase(); // Từ khóa tìm kiếm
 
         let hasResults = false;
@@ -322,7 +337,7 @@
         // Lặp qua từng dòng dữ liệu
         $("#TBody tr").each(function () {
           const rowData = $(this).text().toLowerCase(); // Nội dung dòng hiện tại
-          const rowAddress = $(this).find(".dia_chi").text().toLowerCase(); // Địa chỉ của dòng hiện tại
+          const rowAddress = $(this).find(".dia_chi").text(); // Địa chỉ giữ nguyên giá trị gốc
 
           // Kiểm tra từ khóa và địa chỉ
           const isMatch =
@@ -344,6 +359,8 @@
           $("#noResults").hide();
         }
       });
+
+
 
 
 
