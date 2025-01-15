@@ -898,11 +898,34 @@ function generatePDF(listMaSo) {
         doc.setTextColor(32, 90, 167);
         doc.text(18, 198, "LƯU Ý:");
 
+        // Thiết lập màu chữ chung
         doc.setFont('Tinos', 'B');
         doc.setFontSize(13);
-        doc.text(68, 190, 'Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng 8 Tháng Giêng, Cúng Tại Chùa');
-        doc.text(69, 196, 'Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày 20 Tháng Giêng, Cúng Tại Chùa');
-        doc.text(83, 202, 'Cúng Sao Nặng Vào Buổi Tối Ngày 14 Hàng Tháng, Cúng Tại Chùa');
+
+        // Dòng 1: Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng 8 Tháng Giêng, Cúng Tại Chùa
+        doc.setTextColor(32, 90, 167); // Màu đen
+        doc.text(68, 190, 'Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng');
+        doc.setTextColor(255, 0, 0); // Màu đỏ cho số 8
+        doc.text(170, 190, '8');
+        doc.setTextColor(32, 90, 167); // Màu đen
+        doc.text(174, 190, 'Tháng Giêng, Cúng Tại Chùa');
+
+        // Dòng 2: Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày 20 Tháng Giêng, Cúng Tại Chùa
+        doc.setTextColor(32, 90, 167); // Màu đen
+        doc.text(69, 196, 'Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày');
+        doc.setTextColor(255, 0, 0); // Màu đỏ cho số 20
+        doc.text(166, 196, '20');
+        doc.setTextColor(32, 90, 167); // Màu đen
+        doc.text(172, 196, 'Tháng Giêng, Cúng Tại Chùa');
+
+        // Dòng 3: Cúng Sao Nặng Vào Buổi Tối Ngày 14 Hàng Tháng, Cúng Tại Chùa
+        doc.setTextColor(32, 90, 167); // Màu đen
+        doc.text(83, 202, 'Cúng Sao Nặng Vào Buổi Tối Ngày');
+        doc.setTextColor(255, 0, 0); // Màu đỏ cho số 14
+        doc.text(153, 202, '14');
+        doc.setTextColor(32, 90, 167); // Màu đen
+        doc.text(159, 202, 'Hàng Tháng, Cúng Tại Chùa');
+
 
         //set main
         doc.setFont('Tinos', 'B');
@@ -912,24 +935,38 @@ function generatePDF(listMaSo) {
 
         var headers = ['Số', 'Họ và Tên', 'Ngươi Sanh', 'Tuổi', 'Nam', 'Nữ', 'Sao', 'Hạn', 'Nặng-nhẹ', 'Kỵ Tháng', 'Tam Tai'];
 
-        var dataPerPage = 15; // Số dòng tối đa trên mỗi trang
+        var dataPerPageFirst = 15; // Số dòng ở trang đầu
+        var dataPerPageRest = 20;  // Số dòng ở các trang sau
+        var datas = [];
 
-        var datas = []; // Mảng chứa các mảng con
-
-        // Tách dữ liệu thành các mảng con
-        for (var i = 0; i < data.length; i += dataPerPage) {
-            var subData = data.slice(i, i + dataPerPage);
+        // Tách dữ liệu cho từng trang
+        for (var i = 0; i < data.length; i += dataPerPageFirst) {
+            var isFirstPage = (i === 0);
+            var subData = data.slice(i, i + (isFirstPage ? dataPerPageFirst : dataPerPageRest));
             var rowCount = data.length;
-            while (subData.length < dataPerPage) {
-                subData.push([++rowCount, '', '', '', '', '', '', '', '', '']); // Thêm dữ liệu trống cho đến khi đủ 15 dòng
+            while (subData.length < (isFirstPage ? dataPerPageFirst : dataPerPageRest)) {
+                subData.push([++rowCount, '', '', '', '', '', '', '', '', '']); // Thêm dòng trống nếu cần
             }
             datas.push(subData);
         }
 
+        // Vẽ dữ liệu cho từng trang
         for (page; page < datas.length; page++) {
-            var startY = 55;
+            if (page > 0) {
+                doc.addPage(); // Thêm trang mới cho trang thứ 2 trở đi
+            }
 
-            // Sử dụng autoTable để vẽ bảng
+            var startY = page === 0 ? 55 : 20; // Trang đầu bắt đầu từ 55, trang sau từ 20
+
+            // Bỏ dòng chữ "Giấy Xem Sao, Hạn" trên các trang sau
+            if (page === 0) {
+                doc.setFont('Tinos', 'B');
+                doc.setFontSize(28);
+                doc.setTextColor(255, 0, 0);
+                doc.text(105, 27, 'Giấy Xem Sao, Hạn');
+            }
+
+            // Cấu hình autoTable cho từng trang
             var autoTableOptions = {
                 startY: startY,
                 head: [headers],
@@ -953,10 +990,8 @@ function generatePDF(listMaSo) {
                     fillColor: false,
                     halign: 'center',
                     lineWidth: 0.5,
-                    lineColor: [32, 90, 167]
-
+                    lineColor: [32, 90, 167],
                 },
-
                 columnStyles: {
                     0: { cellWidth: 9, textColor: [32, 90, 167] },
                     1: { cellWidth: 65 },
@@ -968,17 +1003,9 @@ function generatePDF(listMaSo) {
                     7: { cellWidth: 30 },
                     8: { cellWidth: 20 },
                     9: { cellWidth: 20 },
-                    10: { cellWidth: 20 }
+                    10: { cellWidth: 20 },
                 },
             };
-
-            if (page > 0) {
-                doc.addPage();
-                doc.setFont('Tinos', 'B');
-                doc.setFontSize(28);
-                doc.setTextColor(255, 0, 0);
-                doc.text(105, 45, 'Giấy Xem Sao, Hạn');
-            }
 
             try {
                 doc.autoTable(autoTableOptions);
@@ -998,24 +1025,44 @@ function generatePDF(listMaSo) {
             printButton.attr('disabled', false);
             spinner.addClass('d-none');
             hideLoadingOverlay();
-            var pdfBlobUrl = doc.output('bloburl');
-            window.open(pdfBlobUrl);
 
             // var pdfBlobUrl = doc.output('bloburl');
-            // var pdfViewer = document.getElementById('pdfViewer');
-            // pdfViewer.src = pdfBlobUrl;
+            // window.open(pdfBlobUrl);
 
-            // pdfViewer.onload = function () {
-            //     var iframeWindow = pdfViewer.contentWindow;
-            //     var iframeDocument = iframeWindow.document;
+            var pdfBlobUrl = doc.output('bloburl');
+            var pdfViewer = document.getElementById('pdfViewer');
+            pdfViewer.src = pdfBlobUrl;
 
-            //     // Đặt các tuỳ chọn in, ví dụ: in ngang, giấy A4
-            //     iframeDocument.body.style.transform = 'rotate(90deg)'; // In ngang
-            //     iframeDocument.body.style.width = '210mm'; // Giấy A4 - chiều rộng
+            pdfViewer.onload = function () {
+                var iframeWindow = pdfViewer.contentWindow;
+                var iframeDocument = iframeWindow.document;
 
-            //     // Kích hoạt lệnh in
-            //     iframeWindow.print();
-            // };
+                // Đặt các tuỳ chọn in, ví dụ: in ngang, giấy A4
+                iframeDocument.body.style.transform = 'rotate(90deg)'; // In ngang
+                iframeDocument.body.style.width = '210mm'; // Giấy A4 - chiều rộng
+
+                // Kích hoạt lệnh in
+                iframeWindow.print();
+            };
+
+            // // Tạo Blob PDF
+            // var pdfBlob = doc.output('blob');
+            // var pdfURL = URL.createObjectURL(pdfBlob);
+
+            // // Mở cửa sổ mới
+            // var printWindow = window.open(pdfURL, '_blank');
+
+            // // Đảm bảo nội dung PDF tải xong trước khi in
+            // if (printWindow) {
+            //     printWindow.onload = function () {
+            //         setTimeout(() => {
+            //             printWindow.print(); // Kích hoạt chức năng in sau khi tải xong
+            //         }, 500); // Chờ thêm 500ms để đảm bảo PDF đã sẵn sàng
+            //     };
+            // } else {
+            //     alert('Không thể mở cửa sổ in. Vui lòng kiểm tra cài đặt trình duyệt.');
+            // }
+
             return;
         }
         var maSo = listMaSo[index];
