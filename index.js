@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbzqJnxBjy9vDi7G6n1UfKCrowIF0x1-EEuSxUhVItLcbk4townOLCG79wX-i47Cf0C10Q/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbwN25q5ffnn1JGVkiRpaCM4xgjYaAb_fja3xDYXBZaZjbZ7Y5JWonNzwsDwetpMzPcbGQ/exec";
 
 function loadJSON(file, callback) {
     var xobj = new XMLHttpRequest();
@@ -102,13 +102,23 @@ function BtnDel(v) {
 
 
 
-function MaxInv(dc_1, dc_2, dc_3) {
-    $.getJSON(AppsScriptLink + "?page=max",
-        function (data) {
-            // alert("Mã số lớn nhất: " + data); // Hiển thị giá trị trả về từ server
-            $("input[name='ma_so']").val(data);
-        });
+function MaxInv() {
+    $.ajax({
+        url: AppsScriptLink + "?page=max",
+        method: "GET",
+        success: function (data) {
+            console.log(data); // Hiển thị dữ liệu trả về
+            // alert("Mã số lớn nhất: " + data); // Hiển thị dữ liệu
+            $("input[name='ma_so']").val(data); // Gán vào input
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Lỗi khi gọi API: ", textStatus, errorThrown);
+            alert("Đã xảy ra lỗi khi lấy mã số lớn nhất.");
+        }
+    });
 }
+
+
 
 function SET() {
     // Gửi yêu cầu GET tới Apps Script với page = "set"
@@ -550,7 +560,7 @@ $(document).ready(function () {
                         });
                 } else {
                     // alert("MAX");
-                    MaxInv(dc1Select.value, dc2Select.value, dc3Select.value);
+                    MaxInv();
                 }
                 spinner.addClass("d-none");
                 submitButton.prop("disabled", false);
@@ -1032,22 +1042,51 @@ function generatePDF(listMaSo) {
         //     return;
         // }
 
+        // if (index >= numberOfRequests) {
+        //     printButton.attr('disabled', false);
+        //     spinner.addClass('d-none');
+        //     hideLoadingOverlay();
+    
+        //     // Xuất PDF thành Blob
+        //     var pdfBlob = doc.output('blob');
+    
+        //     // Tạo URL Blob từ nội dung PDF
+        //     var pdfURL = URL.createObjectURL(pdfBlob);
+    
+        //     // Mở PDF trong một tab mới
+        //     window.open(pdfURL, '_blank');
+    
+        //     return;
+        // }
         if (index >= numberOfRequests) {
             printButton.attr('disabled', false);
             spinner.addClass('d-none');
             hideLoadingOverlay();
-    
+        
             // Xuất PDF thành Blob
             var pdfBlob = doc.output('blob');
-    
+        
             // Tạo URL Blob từ nội dung PDF
             var pdfURL = URL.createObjectURL(pdfBlob);
-    
+        
             // Mở PDF trong một tab mới
-            window.open(pdfURL, '_blank');
-    
+            var newWindow = window.open(pdfURL, '_blank');
+        
+            // Kiểm tra nếu đang chạy trên máy tính (bao gồm macOS)
+            var isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+                            || /Macintosh|MacIntel|MacPPC|Mac68K/i.test(navigator.userAgent);
+        
+            // Nếu là máy tính, hiển thị công cụ in
+            if (isDesktop && newWindow) {
+                newWindow.onload = function () {
+                    newWindow.print(); // Kích hoạt lệnh in
+                };
+            }
+        
             return;
         }
+        
+
         var maSo = listMaSo[index];
 
 
