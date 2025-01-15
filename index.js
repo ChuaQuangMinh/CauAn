@@ -1040,9 +1040,10 @@ function generatePDF(listMaSo) {
                 // Đặt các tuỳ chọn in, ví dụ: in ngang, giấy A4
                 iframeDocument.body.style.transform = 'rotate(90deg)'; // In ngang
                 iframeDocument.body.style.width = '210mm'; // Giấy A4 - chiều rộng
-
-                // Kích hoạt lệnh in
-                iframeWindow.print();
+                setTimeout(() => {
+                    // Kích hoạt lệnh in
+                    iframeWindow.print();
+                }, 500); // Chờ thêm 500ms để đảm bảo PDF đã sẵn sàng
             };
 
             // // Tạo Blob PDF
