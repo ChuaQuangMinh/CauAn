@@ -1020,50 +1020,32 @@ function generatePDF(listMaSo) {
     var completedRequests = 0;
 
     function processMaSo(index) {
+        // if (index >= numberOfRequests) {
+        //     // All requests are completed
+        //     printButton.attr('disabled', false);
+        //     spinner.addClass('d-none');
+        //     hideLoadingOverlay();
+
+        //     var pdfBlobUrl = doc.output('bloburl');
+        //     window.open(pdfBlobUrl);
+
+        //     return;
+        // }
+
         if (index >= numberOfRequests) {
-            // All requests are completed
             printButton.attr('disabled', false);
             spinner.addClass('d-none');
             hideLoadingOverlay();
-
-            // var pdfBlobUrl = doc.output('bloburl');
-            // window.open(pdfBlobUrl);
-
-            var pdfBlobUrl = doc.output('bloburl');
-            var pdfViewer = document.getElementById('pdfViewer');
-            pdfViewer.src = pdfBlobUrl;
-
-            pdfViewer.onload = function () {
-                var iframeWindow = pdfViewer.contentWindow;
-                var iframeDocument = iframeWindow.document;
-
-                // Đặt các tuỳ chọn in, ví dụ: in ngang, giấy A4
-                iframeDocument.body.style.transform = 'rotate(90deg)'; // In ngang
-                iframeDocument.body.style.width = '210mm'; // Giấy A4 - chiều rộng
-                setTimeout(() => {
-                    // Kích hoạt lệnh in
-                    iframeWindow.print();
-                }, 500); // Chờ thêm 500ms để đảm bảo PDF đã sẵn sàng
-            };
-
-            // // Tạo Blob PDF
-            // var pdfBlob = doc.output('blob');
-            // var pdfURL = URL.createObjectURL(pdfBlob);
-
-            // // Mở cửa sổ mới
-            // var printWindow = window.open(pdfURL, '_blank');
-
-            // // Đảm bảo nội dung PDF tải xong trước khi in
-            // if (printWindow) {
-            //     printWindow.onload = function () {
-            //         setTimeout(() => {
-            //             printWindow.print(); // Kích hoạt chức năng in sau khi tải xong
-            //         }, 500); // Chờ thêm 500ms để đảm bảo PDF đã sẵn sàng
-            //     };
-            // } else {
-            //     alert('Không thể mở cửa sổ in. Vui lòng kiểm tra cài đặt trình duyệt.');
-            // }
-
+    
+            // Xuất PDF thành Blob
+            var pdfBlob = doc.output('blob');
+    
+            // Tạo URL Blob từ nội dung PDF
+            var pdfURL = URL.createObjectURL(pdfBlob);
+    
+            // Mở PDF trong một tab mới
+            window.open(pdfURL, '_blank');
+    
             return;
         }
         var maSo = listMaSo[index];
