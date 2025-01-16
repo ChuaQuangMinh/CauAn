@@ -48,8 +48,8 @@
 
 .custom-td {
     /* Tùy chỉnh các thuộc tính CSS của ô td tại đây */
-    text-align: center;
-    vertical-align: middle;
+    text-align: top;
+    vertical-align: left;
 }
 
 .form-check-input {

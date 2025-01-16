@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbwN25q5ffnn1JGVkiRpaCM4xgjYaAb_fja3xDYXBZaZjbZ7Y5JWonNzwsDwetpMzPcbGQ/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbx9P44VBA1D3ysiRvdLjIlnFpmDDBjM19g9zeK-3BcKalkjV_yEoniK0IxtwebolTxjUA/exec";
 
 function loadJSON(file, callback) {
     var xobj = new XMLHttpRequest();
@@ -12,7 +12,40 @@ function loadJSON(file, callback) {
     xobj.send(null);
 }
 
+function showSaveReminder() {
+    const maSoValue = $('#ma_so').val();
+
+    // Chỉ hiển thị thông báo khi `ma_so` khác "240000"
+    if (maSoValue !== "240000") {
+        const messageContainer = $('#messageContainer');
+
+        // Đặt nội dung thông báo
+        messageContainer.text('Cần lưu lại để có thể in giấy.');
+
+        // Thay đổi kiểu thông báo thành cảnh báo (warning)
+        messageContainer.removeClass('alert-success').addClass('alert-warning');
+
+        // Hiển thị thông báo
+        messageContainer.removeClass('d-none');
+    }
+}
+
+function handleInputChange() {
+    $('#printButton').hide(); // Ẩn nút "In giấy"
+    showSaveReminder();       // Hiển thị thông báo cần lưu
+}
+
 $(document).ready(function () {
+    // Ẩn nút "In giấy" khi có thay đổi trong nhóm input chính
+    $('input[name="dai_dien"], input[name="so_dien_thoai"], select[name="dc_1"], select[name="dc_2"], select[name="dc_3"], input[name="dia_chi"]').on('input change', function () {
+        handleInputChange()
+    });
+
+    // Ẩn nút "In giấy" khi có thay đổi trong nhóm input thành viên (id="TBody")
+    $('#TBody').on('input change', 'input, select', function () {
+        handleInputChange()
+    });
+        
     const urlParams = new URLSearchParams(window.location.search);
     const status = urlParams.get('status');
   
@@ -69,6 +102,8 @@ function BtnMoveUp(v) {
     if (prevRow.length && currentIndex > 1) {
         currentRow.insertBefore(prevRow);
         updateRowNumbers();
+        // Ẩn nút "In giấy" khi di chuyển thành viên
+        handleInputChange()
     }
 }
 
@@ -79,6 +114,8 @@ function BtnMoveDown(v) {
     if (nextRow.length) {
         currentRow.insertAfter(nextRow);
         updateRowNumbers();
+        // Ẩn nút "In giấy" khi di chuyển thành viên
+        handleInputChange()
     }
 }
 
@@ -93,11 +130,15 @@ function BtnAdd() {
     $(v).find("input").val('');
     $(v).removeClass("d-none");
     updateRowNumbers();
+    // // Ẩn nút "In giấy" khi thêm thành viên
+    // handleInputChange()
 }
 
 function BtnDel(v) {
     $(v).closest('tr').remove();
     updateRowNumbers();
+    // Ẩn nút "In giấy" khi xóa thành viên
+    handleInputChange()
 }
 
 
@@ -539,6 +580,10 @@ $(document).ready(function () {
         var submitButton = $("#submitButton");
         var spinner = submitButton.find(".spinner-border");
         var messageContainer = $("#messageContainer");
+
+        // Đặt lại nội dung thông báo
+        messageContainer.text("Đã lưu thành công!").removeClass("alert-warning").addClass("alert-success");
+
         submitButton.prop("disabled", true);
         spinner.removeClass("d-none");
         messageContainer.addClass("d-none");
@@ -547,30 +592,70 @@ $(document).ready(function () {
             type: "POST",
             url: AppsScriptLink,
             data: formData,
-            success: function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                const maSo = urlParams.get('ma_so');
+            // success: function () {
+            //     const urlParams = new URLSearchParams(window.location.search);
+            //     const maSo = urlParams.get('ma_so');
+            //     if (maSo) {
+            //         $.getJSON(AppsScriptLink + "?page=search&no=" + maSo,
+            //             function (data) {
+            //                 var StartRow = data.SR;
+            //                 var RowCount = data.CNT;
+            //                 $('#StartRow').val(StartRow);
+            //                 $('#RowCount').val(RowCount);
+            //             });
+            //     } else {
+            //         // alert("MAX");
+            //         MaxInv();
+            //     }
+            //     spinner.addClass("d-none");
+            //     submitButton.prop("disabled", false);
+            //     messageContainer.removeClass("d-none");
+            //     $("#createNewButton, #printButton").show();
+            //     alert("Đã lưu thành công!");
+            //     setTimeout(function () {
+            //         messageContainer.addClass("d-none");
+            //     }, 5000);
+            // },
+
+            success: function (response) {
+                const maSo = response.maSo; // Lấy mã số từ phản hồi
                 if (maSo) {
-                    $.getJSON(AppsScriptLink + "?page=search&no=" + maSo,
+                    // Hiển thị mã số vào giao diện
+                    $("input[name='ma_so']").val(maSo);
+                    alert("Đã lưu thành công! Mã số: " + maSo); // Hiển thị mã số trong thông báo
+                } else {
+                    alert("Đã lưu thành công!");
+                }
+
+                // Lấy mã số từ input (ưu tiên mã số mới)
+                let searchMaSo = $("input[name='ma_so']").val();
+                const urlParams = new URLSearchParams(window.location.search);
+                const existingMaSo = urlParams.get('ma_so');
+                
+                // Nếu `maSo` không tồn tại trong input, sử dụng `existingMaSo`
+                if (!searchMaSo && existingMaSo) {
+                    searchMaSo = existingMaSo;
+                }
+
+                if (searchMaSo) {
+                    $.getJSON(AppsScriptLink + "?page=search&no=" + searchMaSo,
                         function (data) {
                             var StartRow = data.SR;
                             var RowCount = data.CNT;
                             $('#StartRow').val(StartRow);
                             $('#RowCount').val(RowCount);
                         });
-                } else {
-                    // alert("MAX");
-                    MaxInv();
                 }
+            
                 spinner.addClass("d-none");
                 submitButton.prop("disabled", false);
                 messageContainer.removeClass("d-none");
                 $("#createNewButton, #printButton").show();
-                alert("Đã lưu thành công!");
-                setTimeout(function () {
-                    messageContainer.addClass("d-none");
-                }, 5000);
-            },
+            
+                // setTimeout(function () {
+                //     messageContainer.addClass("d-none");
+                // }, 5000);
+            },            
             error: function () {
                 console.error("Form submission error:", error);
                 alert("Lỗi")
@@ -798,6 +883,35 @@ function tickPrint(listMaSo) {
         completedRequests++;
     }
 }
+
+function editStatusPrint(listMaSo) {
+    var numberOfRequests = listMaSo.length;
+    var completedRequests = 0;
+    while (completedRequests < numberOfRequests) {
+        var maSo = listMaSo[completedRequests]
+        $.getJSON(AppsScriptLink + "?page=editStatusPrint&no=" + maSo, function (dataAPI) {
+            if (dataAPI == "NOT FOUND") {
+                alert('Không tìm thấy...');
+            }
+        })
+        completedRequests++;
+    }
+}
+
+function handlePrintButtonClick() {
+    const maSo = document.getElementById('ma_so').value;
+
+    // Kiểm tra xem mã số có tồn tại không
+    if (!maSo) {
+        alert("Không tìm thấy mã số: " + maSo + "để in!");
+        return;
+    }
+
+    // Chạy hàm generatePDF và tickPrint đồng thời
+    generatePDF([maSo]); // Tạo PDF
+    tickPrint([maSo]);   // Đánh dấu trạng thái
+}
+
 
 function generatePDF(listMaSo) {
     var printButton = $(event.currentTarget);

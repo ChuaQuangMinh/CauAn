@@ -65,8 +65,8 @@
         </div>
               
         <div class="col-md-2">
-          <button class="btn btn-sm btn-success mb-1 print-selected"><i class="bi bi-printer"></i> In tất cả đã
-            chọn</button>
+          <!-- <button class="btn btn-sm btn-success mb-1 print-selected"><i class="bi bi-printer"></i> In tất cả đã
+            chọn</button> -->
         </div>
         <div class="col-12 d-none">
           <div class="row">
@@ -98,7 +98,7 @@
             <tr>
               <th scope="col">Thông tin</th>
               <!-- <th scope="col" style="width: 1%;">Chọn(<span class="selected-count">0</span>)</th> -->
-              <th scope="col" style="width: 8%;">Chức năng</th>
+              <th scope="col" style="width: 4%;">Chức năng</th>
             </tr>
           </thead>
           <tbody id="TBody">
@@ -145,10 +145,10 @@
               <td class="custom-td">
                 <!-- <a href="" class="btn btn-sm btn-info mb-1 view-button"><i class="bi bi-eye"></i></a>
                 <a href="" class="btn btn-sm btn-primary mb-1 edit-button"><i class="bi bi-pencil"></i></a> -->
-                <button class="btn btn-sm btn-success print-button mb-1" data-ma-so="your_ma_so_here"><i class="bi bi-printer"></i></button>
-                <button class="btn btn-sm btn-secondary check-button mb-1" data-ma-so="your_ma_so_here">
+                <!-- <button class="btn btn-sm btn-success print-button mb-1" data-ma-so="your_ma_so_here"><i class="bi bi-printer"></i></button> -->
+                <!-- <button class="btn btn-sm btn-secondary check-button mb-1" data-ma-so="your_ma_so_here">
                   <i class="bi bi-check"></i>
-                </button>
+                </button> -->
               </td>              
             </tr>
           </tbody>
@@ -227,7 +227,7 @@
 
           // Thêm nút Edit với status=edit
           var maSoEditLink = "index.html?ma_so=" + value.maSo + "&status=edit";
-          var editButton = `<a href="${maSoEditLink}" class="btn btn-sm btn-primary mb-1 edit-button"><i class="bi bi-pencil"></i></a>`;
+          var editButton = `<a href="${maSoEditLink}" class="btn btn-sm btn-primary mb-1 edit-button"><i class="bi bi-eye"></i></a>`;
           $row.find(".custom-td").append(editButton);
 
           var $printButton = $row.find("button.print-button");
@@ -237,28 +237,54 @@
             showLoadingOverlay();
             generatePDF([maSo]); // Gọi hàm generatePDF với mã số
           });
-          var $checkButton = $row.find("button.check-button");
-          $checkButton.attr("data-ma-so", value.maSo); // Set the data-ma-so attribute
-          $checkButton.on("click", function () {
-            var maSo = $(this).data('ma-so');
-            tickPrint([maSo]);
+          // var $checkButton = $row.find("button.check-button");
+          // $checkButton.attr("data-ma-so", value.maSo); // Set the data-ma-so attribute
+          // $checkButton.on("click", function () {
+          //   var maSo = $(this).data('ma-so');
+          //   tickPrint([maSo]);
 
-            var currentStatus = $row.find(".trang_thai").text().trim();
-            var newStatus = (currentStatus === "Chưa Biên Giấy") ? "Đã Biên Giấy" : "Chưa Biên Giấy";
+          //   var currentStatus = $row.find(".trang_thai").text().trim();
+          //   var newStatus = (currentStatus === "Chưa Biên Giấy") ? "Đã Biên Giấy" : "Chưa Biên Giấy";
 
-            // Fix condition for "Tam Tai Chưa Biên Giấy"
-            if (currentStatus === "Tam Tai Chưa Biên Giấy") {
-              newStatus = "Đã Biên Giấy";
-            }
+          //   // Fix condition for "Tam Tai Chưa Biên Giấy"
+          //   if (currentStatus === "Tam Tai Chưa Biên Giấy") {
+          //     newStatus = "Đã Biên Giấy";
+          //   }
 
-            $row.find(".trang_thai").text(newStatus);
+          //   $row.find(".trang_thai").text(newStatus);
 
-            if (newStatus === "Đã Biên Giấy") {
-              $row.find(".trang_thai").addClass("da_in").removeClass("chua_in");
-            } else if (newStatus === "Chưa Biên Giấy") {
-              $row.find(".trang_thai").removeClass("da_in").addClass("chua_in");
-            }
-          });
+          //   if (newStatus === "Đã Biên Giấy") {
+          //     $row.find(".trang_thai").addClass("da_in").removeClass("chua_in");
+          //   } else if (newStatus === "Chưa Biên Giấy") {
+          //     $row.find(".trang_thai").removeClass("da_in").addClass("chua_in");
+          //   }
+          // });
+
+          // Kiểm tra trạng thái trước khi thêm nút
+          if (trangThai === "R") {
+            var $checkButton = $('<button class="btn btn-sm btn-secondary check-button mb-1"><i class="bi bi-check"></i></button>');
+            $checkButton.attr("data-ma-so", value.maSo); // Set the data-ma-so attribute
+
+            // Thêm sự kiện click cho nút
+            $checkButton.on("click", function () {
+              var maSo = $(this).data('ma-so');
+              editStatusPrint([maSo]);
+
+              var currentStatus = $row.find(".trang_thai").text().trim();
+              var newStatus = (currentStatus === "Chưa Biên Giấy") ? "Đã Biên Giấy" : "Chưa Biên Giấy";
+
+              $row.find(".trang_thai").text(newStatus);
+
+              if (newStatus === "Đã Biên Giấy") {
+                $row.find(".trang_thai").addClass("da_in").removeClass("chua_in");
+              } else if (newStatus === "Chưa Biên Giấy") {
+                $row.find(".trang_thai").removeClass("da_in").addClass("chua_in");
+              }
+            });
+
+            // Thêm nút vào cột chức năng
+            $row.find(".custom-td").append($checkButton);
+          }
 
           $("#TBody").append($row); // Append the row to the table body
 
