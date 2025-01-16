@@ -836,6 +836,13 @@ function generatePDF(listMaSo) {
         // let soDienThoai = "0968123456";
         // let diaChi = "Xã Tân Lân, Huyện Cần Đước, Tỉnh Long An";
 
+        doc.addImage('image/quangminh1.png', 'PNG', 15, -23, 80, 0); // Thay đổi tọa độ và kích thước phù hợp
+
+        // doc.addImage('image/vien1.png', 'PNG', 3, 3, 30, 0);
+        // doc.addImage('image/vien4.png', 'PNG', 3, 177, 30, 0);
+        // doc.addImage('image/vien2.png', 'PNG', doc.internal.pageSize.width - 33, 3, 30, 0);
+        // doc.addImage('image/vien3.png', 'PNG', doc.internal.pageSize.width - 33, 177, 30, 0);
+
         doc.addImage('image/logo.png', 'PNG', doc.internal.pageSize.width - 82, 10, 30, 0);
         doc.addImage('image/logo1.png', 'PNG', doc.internal.pageSize.width - 52, 10, 30, 0);
 
@@ -844,16 +851,19 @@ function generatePDF(listMaSo) {
         doc.setTextColor(56, 84, 146);
         doc.text(250, 10, 'Mã số: ' + maSo);
 
-        doc.setFont('Tinos', 'B');
-        doc.setFontSize(16);
-        doc.setTextColor(255, 0, 0);
-        doc.text(29, 15, 'CHÙA QUANG MINH');
+        // Thêm hình ảnh thay thế văn bản
+        // doc.addImage('image/quangminh.jpg', 'JPG', 17, 10, 72, 0); // Thay đổi tọa độ và kích thước phù hợp
 
-        doc.setFont('Tinos', 'N');
-        doc.setFontSize(14);
-        doc.setTextColor(56, 84, 146);
-        doc.text(17, 21, 'Khu 1B - Thị Trấn Cần Đước - Long An');
-        doc.text(38, 27, 'DĐ: 0903.623517');
+        // doc.setFont('Tinos', 'B');
+        // doc.setFontSize(16);
+        // doc.setTextColor(255, 0, 0);
+        // doc.text(29, 15, 'CHÙA QUANG MINH');
+
+        // doc.setFont('Tinos', 'N');
+        // doc.setFontSize(14);
+        // doc.setTextColor(56, 84, 146);
+        // doc.text(17, 21, 'Khu 1B - Thị Trấn Cần Đước - Long An');
+        // doc.text(38, 27, 'DĐ: 0903.623517');
 
         doc.setFont('Tinos', 'B');
         doc.setFontSize(28);
@@ -901,12 +911,21 @@ function generatePDF(listMaSo) {
         doc.setFontSize(14);
         doc.setTextColor(56, 84, 146);
         doc.text(190, 52, "Năm: Ất Tỵ " + year);
+        // doc.text(190, 52, "Năm:");
+        // doc.addImage('image/y2025.png', 'PNG', 205, 48, 10, 0); // Thay đổi tọa độ và kích thước phù hợp
+
+
+        // doc.addImage('image/tet.png', 'PNG', doc.internal.pageSize.width - 82, 10, 30, 0);
 
         //set footer
         doc.setFont('Tinos', 'BI');
         doc.setFontSize(28);
-        doc.setTextColor(32, 90, 167);
+        doc.setTextColor(32, 90, 167); // Màu xanh
+        // doc.setTextColor(255, 0, 0);
         doc.text(18, 198, "LƯU Ý:");
+
+        // doc.addImage('image/lotus.png', 'PNG', doc.internal.pageSize.width - 50, 185, 30, 0);
+        // doc.addImage('image/lotus1.png', 'PNG', doc.internal.pageSize.width - 60, 182, 40, 0);
 
         // Thiết lập màu chữ chung
         doc.setFont('Tinos', 'B');
@@ -974,7 +993,13 @@ function generatePDF(listMaSo) {
                 doc.setFontSize(28);
                 doc.setTextColor(255, 0, 0);
                 doc.text(105, 27, 'Giấy Xem Sao, Hạn');
-            }
+            } 
+            // else {
+            //     doc.addImage('image/vien1.png', 'PNG', 6, 6, 30, 0);
+            //     doc.addImage('image/vien4.png', 'PNG', 6, 174, 30, 0);
+            //     doc.addImage('image/vien2.png', 'PNG', doc.internal.pageSize.width - 36, 6, 30, 0);
+            //     doc.addImage('image/vien3.png', 'PNG', doc.internal.pageSize.width - 36, 174, 30, 0);
+            // }
 
             // Cấu hình autoTable cho từng trang
             var autoTableOptions = {
@@ -1030,61 +1055,58 @@ function generatePDF(listMaSo) {
     var completedRequests = 0;
 
     function processMaSo(index) {
-        // if (index >= numberOfRequests) {
-        //     // All requests are completed
-        //     printButton.attr('disabled', false);
-        //     spinner.addClass('d-none');
-        //     hideLoadingOverlay();
-
-        //     var pdfBlobUrl = doc.output('bloburl');
-        //     window.open(pdfBlobUrl);
-
-        //     return;
-        // }
-
-        // if (index >= numberOfRequests) {
-        //     printButton.attr('disabled', false);
-        //     spinner.addClass('d-none');
-        //     hideLoadingOverlay();
-    
-        //     // Xuất PDF thành Blob
-        //     var pdfBlob = doc.output('blob');
-    
-        //     // Tạo URL Blob từ nội dung PDF
-        //     var pdfURL = URL.createObjectURL(pdfBlob);
-    
-        //     // Mở PDF trong một tab mới
-        //     window.open(pdfURL, '_blank');
-    
-        //     return;
-        // }
         if (index >= numberOfRequests) {
+            // All requests are completed
             printButton.attr('disabled', false);
             spinner.addClass('d-none');
             hideLoadingOverlay();
-        
-            // Xuất PDF thành Blob
-            var pdfBlob = doc.output('blob');
-        
-            // Tạo URL Blob từ nội dung PDF
-            var pdfURL = URL.createObjectURL(pdfBlob);
-        
-            // Mở PDF trong một tab mới
-            var newWindow = window.open(pdfURL, '_blank');
-        
-            // Kiểm tra nếu đang chạy trên máy tính (bao gồm macOS)
-            var isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
-                            || /Macintosh|MacIntel|MacPPC|Mac68K/i.test(navigator.userAgent);
-        
-            // Nếu là máy tính, hiển thị công cụ in
-            if (isDesktop && newWindow) {
-                newWindow.onload = function () {
-                    newWindow.print(); // Kích hoạt lệnh in
-                };
-            }
-        
+            var pdfBlobUrl = doc.output('bloburl');
+            window.open(pdfBlobUrl);
+
+            // var pdfBlobUrl = doc.output('bloburl');
+            // var pdfViewer = document.getElementById('pdfViewer');
+            // pdfViewer.src = pdfBlobUrl;
+
+            // pdfViewer.onload = function () {
+            //     var iframeWindow = pdfViewer.contentWindow;
+            //     var iframeDocument = iframeWindow.document;
+
+            //     // Đặt các tuỳ chọn in, ví dụ: in ngang, giấy A4
+            //     iframeDocument.body.style.transform = 'rotate(90deg)'; // In ngang
+            //     iframeDocument.body.style.width = '210mm'; // Giấy A4 - chiều rộng
+
+            //     // Kích hoạt lệnh in
+            //     iframeWindow.print();
+            // };
             return;
         }
+        // if (index >= numberOfRequests) {
+        //     printButton.attr('disabled', false);
+        //     spinner.addClass('d-none');
+        //     hideLoadingOverlay();
+        
+        //     // Xuất PDF thành Blob
+        //     var pdfBlob = doc.output('blob');
+        
+        //     // Tạo URL Blob từ nội dung PDF
+        //     var pdfURL = URL.createObjectURL(pdfBlob);
+        
+        //     // Mở PDF trong một tab mới
+        //     var newWindow = window.open(pdfURL, '_blank');
+        
+        //     // Kiểm tra nếu đang chạy trên máy tính (bao gồm macOS)
+        //     var isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+        //                     || /Macintosh|MacIntel|MacPPC|Mac68K/i.test(navigator.userAgent);
+        
+        //     // Nếu là máy tính, hiển thị công cụ in
+        //     if (isDesktop && newWindow) {
+        //         newWindow.onload = function () {
+        //             newWindow.print(); // Kích hoạt lệnh in
+        //         };
+        //     }
+        
+        //     return;
+        // }
         
 
         var maSo = listMaSo[index];

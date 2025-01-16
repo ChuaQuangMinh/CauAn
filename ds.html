@@ -220,10 +220,10 @@
             memberList.append(`<div>Không có thông tin thành viên</div>`);
           }
 
-          // Thêm nút View với status=view
-          var maSoViewLink = "index.html?ma_so=" + value.maSo + "&status=view";
-          var viewButton = `<a href="${maSoViewLink}" class="btn btn-sm btn-info mb-1 view-button"><i class="bi bi-eye"></i></a>`;
-          $row.find(".custom-td").append(viewButton);
+          // // Thêm nút View với status=view
+          // var maSoViewLink = "index.html?ma_so=" + value.maSo + "&status=view";
+          // var viewButton = `<a href="${maSoViewLink}" class="btn btn-sm btn-info mb-1 view-button"><i class="bi bi-eye"></i></a>`;
+          // $row.find(".custom-td").append(viewButton);
 
           // Thêm nút Edit với status=edit
           var maSoEditLink = "index.html?ma_so=" + value.maSo + "&status=edit";
@@ -244,18 +244,18 @@
             tickPrint([maSo]);
 
             var currentStatus = $row.find(".trang_thai").text().trim();
-            var newStatus = (currentStatus === "Chưa Viết Giấy") ? "Đã Viết Giấy" : "Chưa Viết Giấy";
+            var newStatus = (currentStatus === "Chưa Biên Giấy") ? "Đã Biên Giấy" : "Chưa Biên Giấy";
 
-            // Fix condition for "Tam Tai Chưa Viết Giấy"
-            if (currentStatus === "Tam Tai Chưa Viết Giấy") {
-              newStatus = "Đã Viết Giấy";
+            // Fix condition for "Tam Tai Chưa Biên Giấy"
+            if (currentStatus === "Tam Tai Chưa Biên Giấy") {
+              newStatus = "Đã Biên Giấy";
             }
 
             $row.find(".trang_thai").text(newStatus);
 
-            if (newStatus === "Đã Viết Giấy") {
+            if (newStatus === "Đã Biên Giấy") {
               $row.find(".trang_thai").addClass("da_in").removeClass("chua_in");
-            } else if (newStatus === "Chưa Viết Giấy") {
+            } else if (newStatus === "Chưa Biên Giấy") {
               $row.find(".trang_thai").removeClass("da_in").addClass("chua_in");
             }
           });
