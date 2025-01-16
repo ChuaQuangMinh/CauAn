@@ -836,34 +836,38 @@ function generatePDF(listMaSo) {
         // let soDienThoai = "0968123456";
         // let diaChi = "Xã Tân Lân, Huyện Cần Đước, Tỉnh Long An";
 
-        doc.addImage('image/quangminh1.png', 'PNG', 15, -23, 80, 0); // Thay đổi tọa độ và kích thước phù hợp
+        // doc.addImage('image/quangminh.png', 'PNG', 15, -23, 80, 0); // Thay đổi tọa độ và kích thước phù hợp
 
         // doc.addImage('image/vien1.png', 'PNG', 3, 3, 30, 0);
         // doc.addImage('image/vien4.png', 'PNG', 3, 177, 30, 0);
         // doc.addImage('image/vien2.png', 'PNG', doc.internal.pageSize.width - 33, 3, 30, 0);
         // doc.addImage('image/vien3.png', 'PNG', doc.internal.pageSize.width - 33, 177, 30, 0);
 
-        doc.addImage('image/logo.png', 'PNG', doc.internal.pageSize.width - 82, 10, 30, 0);
-        doc.addImage('image/logo1.png', 'PNG', doc.internal.pageSize.width - 52, 10, 30, 0);
+        doc.addImage('image/logo.png', 'PNG', doc.internal.pageSize.width - 77, 12, 28, 0);
+        doc.addImage('image/logo1.png', 'PNG', doc.internal.pageSize.width - 50, 12, 28, 0);
 
-        doc.setFont('Tinos', 'N');
-        doc.setFontSize(14);
+        // doc.setFont('Tinos', 'N');
+        doc.setFont('Tinos', 'I');
+        doc.setFontSize(12);
         doc.setTextColor(56, 84, 146);
-        doc.text(250, 10, 'Mã số: ' + maSo);
+        // doc.setTextColor(0, 0, 0);
+        doc.text(255, 12, 'Số: ' + maSo);
 
         // Thêm hình ảnh thay thế văn bản
         // doc.addImage('image/quangminh.jpg', 'JPG', 17, 10, 72, 0); // Thay đổi tọa độ và kích thước phù hợp
+        doc.addImage('image/longden1.png', 'PNG', 7, 9, 23, 0);
+        doc.addImage('image/longden2.png', 'PNG', 79.8, 9, 23, 0);
 
-        // doc.setFont('Tinos', 'B');
-        // doc.setFontSize(16);
-        // doc.setTextColor(255, 0, 0);
-        // doc.text(29, 15, 'CHÙA QUANG MINH');
+        doc.setFont('Tinos', 'B');
+        doc.setFontSize(16);
+        doc.setTextColor(255, 0, 0);
+        doc.text(26.5, 18, 'CHÙA QUANG MINH');
 
-        // doc.setFont('Tinos', 'N');
-        // doc.setFontSize(14);
-        // doc.setTextColor(56, 84, 146);
-        // doc.text(17, 21, 'Khu 1B - Thị Trấn Cần Đước - Long An');
-        // doc.text(38, 27, 'DĐ: 0903.623517');
+        doc.setFont('Tinos', 'N');
+        doc.setFontSize(13);
+        doc.setTextColor(56, 84, 146);
+        doc.text(23, 24, 'Khu 1B - TT.Cần Đước - Long An');
+        doc.text(38.5, 30, 'DĐ: 0903.623517');
 
         doc.setFont('Tinos', 'B');
         doc.setFontSize(28);
@@ -883,10 +887,10 @@ function generatePDF(listMaSo) {
         doc.text(18, 45, '                            ..........................................................................................................');
 
 
-        doc.setFont('Tinos', 'N');
+        doc.setFont('Tinos', 'I');
         doc.setFontSize(14);
         doc.setTextColor(0, 0, 0);
-        doc.text(230, 44, soDienThoai);
+        doc.text(220, 44, soDienThoai);
 
         doc.setFont('Tinos', 'B');
         doc.setFontSize(14);
@@ -902,7 +906,7 @@ function generatePDF(listMaSo) {
         doc.setFont('Tinos', 'N');
         doc.text(18, 52, "               .......................................................................................................................");
 
-        doc.setFont('Tinos', 'N');
+        doc.setFont('Tinos', 'I');
         doc.setFontSize(14);
         doc.setTextColor(0, 0, 0);
         doc.text(45, 51, diaChi);
@@ -910,9 +914,11 @@ function generatePDF(listMaSo) {
         doc.setFont('Tinos', 'B');
         doc.setFontSize(14);
         doc.setTextColor(56, 84, 146);
-        doc.text(190, 52, "Năm: Ất Tỵ " + year);
-        // doc.text(190, 52, "Năm:");
-        // doc.addImage('image/y2025.png', 'PNG', 205, 48, 10, 0); // Thay đổi tọa độ và kích thước phù hợp
+        doc.text(190, 52, "Năm: ");
+        doc.setFont('Tinos', 'BI');
+        doc.setFontSize(14);
+        doc.setTextColor(56, 84, 146);
+        doc.text(203, 52, "Ất Tỵ " + year);
 
 
         // doc.addImage('image/tet.png', 'PNG', doc.internal.pageSize.width - 82, 10, 30, 0);
@@ -922,7 +928,9 @@ function generatePDF(listMaSo) {
         doc.setFontSize(28);
         doc.setTextColor(32, 90, 167); // Màu xanh
         // doc.setTextColor(255, 0, 0);
-        doc.text(18, 198, "LƯU Ý:");
+        doc.text(30, 198, "LƯU Ý:");
+
+        doc.addImage('image/muiten.png', 'PNG', 70, 188, 15, 0);
 
         // doc.addImage('image/lotus.png', 'PNG', doc.internal.pageSize.width - 50, 185, 30, 0);
         // doc.addImage('image/lotus1.png', 'PNG', doc.internal.pageSize.width - 60, 182, 40, 0);
@@ -933,27 +941,27 @@ function generatePDF(listMaSo) {
 
         // Dòng 1: Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng 8 Tháng Giêng, Cúng Tại Chùa
         doc.setTextColor(32, 90, 167); // Màu đen
-        doc.text(68, 190, 'Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng');
+        doc.text(93, 190, 'Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng');
         doc.setTextColor(255, 0, 0); // Màu đỏ cho số 8
-        doc.text(170, 190, '8');
+        doc.text(195, 190, '8');
         doc.setTextColor(32, 90, 167); // Màu đen
-        doc.text(174, 190, 'Tháng Giêng, Cúng Tại Chùa');
+        doc.text(199, 190, 'Tháng Giêng, Cúng Tại Chùa');
 
         // Dòng 2: Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày 20 Tháng Giêng, Cúng Tại Chùa
         doc.setTextColor(32, 90, 167); // Màu đen
-        doc.text(69, 196, 'Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày');
+        doc.text(94, 196, 'Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày');
         doc.setTextColor(255, 0, 0); // Màu đỏ cho số 20
-        doc.text(166, 196, '20');
+        doc.text(191, 196, '20');
         doc.setTextColor(32, 90, 167); // Màu đen
-        doc.text(172, 196, 'Tháng Giêng, Cúng Tại Chùa');
+        doc.text(197, 196, 'Tháng Giêng, Cúng Tại Chùa');
 
         // Dòng 3: Cúng Sao Nặng Vào Buổi Tối Ngày 14 Hàng Tháng, Cúng Tại Chùa
         doc.setTextColor(32, 90, 167); // Màu đen
-        doc.text(83, 202, 'Cúng Sao Nặng Vào Buổi Tối Ngày');
+        doc.text(108, 202, 'Cúng Sao Nặng Vào Buổi Tối Ngày');
         doc.setTextColor(255, 0, 0); // Màu đỏ cho số 14
-        doc.text(153, 202, '14');
+        doc.text(178, 202, '14');
         doc.setTextColor(32, 90, 167); // Màu đen
-        doc.text(159, 202, 'Hàng Tháng, Cúng Tại Chùa');
+        doc.text(184, 202, 'Hàng Tháng, Cúng Tại Chùa');
 
 
         //set main
