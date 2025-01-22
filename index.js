@@ -622,9 +622,11 @@ $(document).ready(function () {
                 if (maSo) {
                     // Hiển thị mã số vào giao diện
                     $("input[name='ma_so']").val(maSo);
+                    $('#ThemMoi').val('N');
                     alert("Đã lưu thành công! Mã số: " + maSo); // Hiển thị mã số trong thông báo
                 } else {
                     alert("Đã lưu thành công!");
+                    $('#ThemMoi').val('N');
                 }
 
                 // Lấy mã số từ input (ưu tiên mã số mới)
