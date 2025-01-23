@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycby4rjSfe_TFduzQou2qp9PK_xBFTBjigM2hvqrab1GAt721TbL0F78_LH8E8uVYXWgaPQ/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbxOmACvkHCl-ujQvaZrZ3wkdJHT8WfQhOtUbQzRre_E8Ulax7XAF-OBeDyTfbxwe6ZteQ/exec";
 
 function loadJSON(file, callback) {
     var xobj = new XMLHttpRequest();
@@ -11,6 +11,17 @@ function loadJSON(file, callback) {
     };
     xobj.send(null);
 }
+
+let nameChua;
+
+// Kiểm tra URL hiện tại
+if (window.location.href.includes("PhuocSon")) {
+    nameChua = "ChuaPhuocSon";
+} else {
+    nameChua = "ChuaQuangMinh";
+}
+
+console.log(nameChua); // Kiểm tra giá trị của nameChua
 
 function showSaveReminder() {
     const maSoValue = $('#ma_so').val();
@@ -145,7 +156,7 @@ function BtnDel(v) {
 
 function MaxInv() {
     $.ajax({
-        url: AppsScriptLink + "?page=max",
+        url: AppsScriptLink + "?page=max&chua="+nameChua,
         method: "GET",
         success: function (data) {
             console.log(data); // Hiển thị dữ liệu trả về
@@ -163,7 +174,7 @@ function MaxInv() {
 
 function SET() {
     // Gửi yêu cầu GET tới Apps Script với page = "set"
-    $.getJSON(AppsScriptLink + "?page=set",
+    $.getJSON(AppsScriptLink + "?page=set&chua="+nameChua,
         function (data) {
             // Hiển thị thông báo thành công
             alert("Cập nhật mã số thành công!");
@@ -527,7 +538,7 @@ $(document).ready(function () {
         var no = $('#ma_so').val();
         if (pNo != "") no = pNo;
         showLoadingOverlay();
-        $.getJSON(AppsScriptLink + "?page=search&no=" + no,
+        $.getJSON(AppsScriptLink + "?page=search&no=" + no + "&chua="+nameChua,
             function (data) {
                 hideLoadingOverlay();
                 if (data == "NOT FOUND") {
@@ -590,32 +601,8 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: AppsScriptLink,
+            url: AppsScriptLink + "?chua=" + nameChua,
             data: formData,
-            // success: function () {
-            //     const urlParams = new URLSearchParams(window.location.search);
-            //     const maSo = urlParams.get('ma_so');
-            //     if (maSo) {
-            //         $.getJSON(AppsScriptLink + "?page=search&no=" + maSo,
-            //             function (data) {
-            //                 var StartRow = data.SR;
-            //                 var RowCount = data.CNT;
-            //                 $('#StartRow').val(StartRow);
-            //                 $('#RowCount').val(RowCount);
-            //             });
-            //     } else {
-            //         // alert("MAX");
-            //         MaxInv();
-            //     }
-            //     spinner.addClass("d-none");
-            //     submitButton.prop("disabled", false);
-            //     messageContainer.removeClass("d-none");
-            //     $("#createNewButton, #printButton").show();
-            //     alert("Đã lưu thành công!");
-            //     setTimeout(function () {
-            //         messageContainer.addClass("d-none");
-            //     }, 5000);
-            // },
 
             success: function (response) {
                 const maSo = response.maSo; // Lấy mã số từ phản hồi
@@ -640,7 +627,7 @@ $(document).ready(function () {
                 }
 
                 if (searchMaSo) {
-                    $.getJSON(AppsScriptLink + "?page=search&no=" + searchMaSo,
+                    $.getJSON(AppsScriptLink + "?page=search&no=" + searchMaSo + "&chua="+nameChua,
                         function (data) {
                             var StartRow = data.SR;
                             var RowCount = data.CNT;
@@ -683,8 +670,21 @@ $(document).ready(function () {
     });
 });
 
+// function CreateNew() {
+//     window.location.href = "index.html";
+// }
 function CreateNew() {
-    window.location.href = "index.html";
+    // Lấy URL hiện tại
+    const currentUrl = window.location.href;
+
+    // Kiểm tra URL để xác định trang
+    if (currentUrl.includes("PhuocSon")) {
+        // Nếu URL chứa "PhuocSon", chuyển đến indexPhuocSon.html
+        window.location.href = "indexPhuocSon.html";
+    } else {
+        // Nếu không, chuyển đến index.html
+        window.location.href = "index.html";
+    }
 }
 
 function getSao(gioiTinh, tuoi) {
@@ -877,7 +877,7 @@ function tickPrint(listMaSo) {
     var completedRequests = 0;
     while (completedRequests < numberOfRequests) {
         var maSo = listMaSo[completedRequests]
-        $.getJSON(AppsScriptLink + "?page=print&no=" + maSo, function (dataAPI) {
+        $.getJSON(AppsScriptLink + "?page=print&no=" + maSo + "&chua="+nameChua, function (dataAPI) {
             if (dataAPI == "NOT FOUND") {
                 alert('Không tìm thấy...');
             }
@@ -891,7 +891,7 @@ function editStatusPrint(listMaSo) {
     var completedRequests = 0;
     while (completedRequests < numberOfRequests) {
         var maSo = listMaSo[completedRequests]
-        $.getJSON(AppsScriptLink + "?page=editStatusPrint&no=" + maSo, function (dataAPI) {
+        $.getJSON(AppsScriptLink + "?page=editStatusPrint&no=" + maSo + "&chua="+nameChua, function (dataAPI) {
             if (dataAPI == "NOT FOUND") {
                 alert('Không tìm thấy...');
             }
@@ -1365,7 +1365,7 @@ function generatePDF(listMaSo) {
 
 
 
-        $.getJSON(AppsScriptLink + "?page=search&no=" + maSo, function (dataAPI) {
+        $.getJSON(AppsScriptLink + "?page=search&no=" + maSo + "&chua="+nameChua, function (dataAPI) {
             if (dataAPI == "NOT FOUND") {
                 alert('Không tìm thấy...');
             } else {
