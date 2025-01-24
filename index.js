@@ -12,6 +12,98 @@ function loadJSON(file, callback) {
     xobj.send(null);
 }
 
+let nameStats = {};  // Biến lưu trữ dữ liệu từ file name.json
+const culturalRules = {
+    "văn": "Nam",
+    "thị": "Nữ"
+};
+
+// Hàm lấy tỷ lệ Nam/Nữ từ dữ liệu đã có sẵn trong nameStats
+function getGenderRatio(word) {
+    const stats = nameStats[word.toLowerCase()];
+    if (!stats) return { male: 0, female: 0 };
+    
+    // Trả về tỷ lệ trực tiếp từ dữ liệu đã có sẵn
+    const ratio = {
+        male: stats.Nam,
+        female: stats.Nữ
+    };
+
+    console.log(`Từ '${word}': Nam = ${ratio.male.toFixed(2)}, Nữ = ${ratio.female.toFixed(2)}`);
+    return ratio;
+}
+
+// Hàm dự đoán giới tính từ tên
+function predictGenderFromName(name) {
+    console.log('Dự đoán giới tính từ tên:', name);
+    const words = name.toLowerCase().split(" ").slice(1); // Bỏ qua họ, chỉ phân tích tên lót và tên cuối
+    let maleScore = 0;
+    let femaleScore = 0;
+
+    console.log(`Tên: ${name}`);
+    console.log("Tách tên thành các từ (bỏ qua họ):", words);
+
+    // Kiểm tra theo quy tắc văn hóa
+    const firstName = words[0];
+    const lastName = words[words.length - 1];
+
+    // Nếu tên lót là một từ văn hóa, quyết định giới tính ngay
+    if (culturalRules[firstName]) {
+        console.log(`Tên lót '${firstName}' phù hợp với quy tắc văn hóa: ${culturalRules[firstName]}`);
+        return culturalRules[firstName];
+    }
+
+    // Tính điểm cho các từ trong tên dựa trên tỷ lệ Nam/Nữ
+    words.forEach(word => {
+        const ratio = getGenderRatio(word);
+        maleScore += ratio.male;
+        femaleScore += ratio.female;
+    });
+
+    console.log(`Điểm Nam: ${maleScore.toFixed(2)}, Điểm Nữ: ${femaleScore.toFixed(2)}`);
+
+    // Dự đoán dựa trên tỷ lệ Nam và Nữ
+    if (maleScore > femaleScore) {
+        console.log(`Dự đoán giới tính: Nam`);
+        return "Nam";
+    }
+    if (femaleScore > maleScore) {
+        console.log(`Dự đoán giới tính: Nữ`);
+        return "Nữ";
+    }
+    console.log(`Dự đoán giới tính: Không xác định`);
+    return "Không xác định";
+}
+
+// Hàm xử lý khi người dùng thay đổi dữ liệu
+function handleNameChange(input) {
+    var row = input.closest('tr'); // Lấy dòng chứa input đang được xét
+    var hoVaTen = row.querySelector('input[name="ho_va_ten"]').value; // Lấy giá trị Họ và tên từ input trong dòng đó
+    hoVaTen = hoVaTen.trim();
+    console.log('Giá trị Họ và tên:', hoVaTen);
+
+    // Dự đoán giới tính nếu có tên nhập vào
+    if (hoVaTen) {
+        const gender = predictGenderFromName(hoVaTen); // Dự đoán giới tính từ tên
+        console.log('Giới tính được chọn:', gender);
+
+        // Cập nhật giá trị vào select giới tính trong dòng hiện tại
+        row.querySelector('select[name="gioi_tinh"]').value = gender;
+    } else {
+        // Nếu không có tên, chọn Nam mặc định
+        console.log('Không có tên, chọn Nam mặc định');
+        row.querySelector('select[name="gioi_tinh"]').value = 'Nam';
+    }
+}
+
+function loadNameStats() {
+    console.log('Đang tải dữ liệu từ file name.json...');
+    loadJSON('name.json', function(data) {
+        nameStats = data;
+        console.log('Dữ liệu đã tải thành công:', nameStats);
+    });
+}
+
 let nameChua;
 
 // Kiểm tra URL hiện tại
@@ -47,6 +139,7 @@ function handleInputChange() {
 }
 
 $(document).ready(function () {
+    loadNameStats();
     // Ẩn nút "In giấy" khi có thay đổi trong nhóm input chính
     $('input[name="dai_dien"], input[name="so_dien_thoai"], select[name="dc_1"], select[name="dc_2"], select[name="dc_3"], input[name="dia_chi"]').on('input change', function () {
         handleInputChange()
