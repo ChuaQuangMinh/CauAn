@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbxOmACvkHCl-ujQvaZrZ3wkdJHT8WfQhOtUbQzRre_E8Ulax7XAF-OBeDyTfbxwe6ZteQ/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbybB-QZLcSnMCRbk4TJrf7eOlK3qJYavHVtjD2lgYecGf876ia6h-_3PobIEqGZ5yeOQA/exec";
 
 function loadJSON(file, callback) {
     var xobj = new XMLHttpRequest();
@@ -177,7 +177,7 @@ $(document).ready(function () {
       $('button').prop('disabled', true);
   
       // Optionally, hide "Lưu", "Tạo mới", và "In giấy" buttons
-      $('#submitButton, #createNewButton, #printButton').hide();
+      $('#submitButton, #createNewButton, #printButton, #tinhTaiButton').hide();
   
       // Add some styles for the overlay
       $('#readOnlyOverlay').css({
@@ -669,6 +669,16 @@ $(document).ready(function () {
                             document.getElementsByName("nguoi_sanh")[i].value = value[11];
                         }
                         i = i + 1;
+                        console.log(value[12] + "," + value[13]);
+                        // Kiểm tra giá trị của value[12] và value[13] để thay đổi chữ nút Tịnh tài
+                        if (value[12] !== "" && value[12] !== null) {
+                            // Nếu value[12] có giá trị, thay đổi chữ nút Tịnh tài thành giá trị của value[12]
+                            document.getElementById("tinhTaiButton").innerText = value[12] + "k";
+                        }
+                        if (value[13] === "Gởi Cúng") {
+                            // Nếu value[13] có giá trị, thay đổi chữ nút Tịnh tài thành "Đã gởi cúng"
+                            document.getElementById("goiCungButton").innerText = "Đã gởi cúng";
+                        }
                     });
                 }
             });
@@ -968,6 +978,7 @@ function checkTamTai(currentYear, yearOfBirth, tuoi) {
 function tickPrint(listMaSo) {
     var numberOfRequests = listMaSo.length;
     var completedRequests = 0;
+
     while (completedRequests < numberOfRequests) {
         var maSo = listMaSo[completedRequests]
         $.getJSON(AppsScriptLink + "?page=print&no=" + maSo + "&chua="+nameChua, function (dataAPI) {
@@ -977,6 +988,80 @@ function tickPrint(listMaSo) {
         })
         completedRequests++;
     }
+}
+
+function goiCungButtonClick() {
+    const maSo = document.getElementById('ma_so').value;
+    
+    // Kiểm tra nếu không có mã số
+    if (!maSo) {
+        alert("Không tìm thấy mã số!");
+        return;
+    }
+
+    // Thay đổi chữ trên nút thành "Đang gởi cúng"
+    document.getElementById('goiCungButton').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang gởi cúng';
+
+    $.get(AppsScriptLink + "?page=goiCung&no=" + maSo + "&chua=" + nameChua, function (response) {
+        console.log(response);  // In ra toàn bộ phản hồi từ API để kiểm tra
+    
+        if (response.status == "SUCCESS") {
+            alert("Cập nhật thành công: " + response.message);
+            document.getElementById('goiCungButton').innerHTML = 'Đã gởi cúng';
+        } else {
+            alert("Không thành công: " + response.message);
+            document.getElementById('goiCungButton').innerHTML = 'Gởi cúng';
+        }
+    }).fail(function (error) {
+        console.log(error);  // Kiểm tra lỗi nếu có sự cố trong việc gọi API
+        alert("Lỗi API: " + JSON.stringify(error));
+    });
+}
+
+let tinhTai = 0;
+function tinhTaiButtonClick() {
+    const maSo = document.getElementById('ma_so').value;
+    
+    // Kiểm tra nếu không có mã số
+    if (!maSo) {
+        alert("Không tìm thấy mã số!");
+        return;
+    }
+
+    let tinhTaiMoi = prompt("Nhập số tiền tịnh tài (VD: 50, 100):");
+    
+    // Kiểm tra nếu người dùng không nhập số
+    if (!tinhTaiMoi || isNaN(tinhTaiMoi)) {
+        alert("Vui lòng nhập một số hợp lệ!");
+        return;
+    }
+
+    let formData = {
+        page: "tinhTai",  // Xác định loại request
+        chua: nameChua,  // Biến nameChua chứa tên sheet
+        ma_so: maSo,  // Mã số cần cập nhật
+        tinh_tai: tinhTaiMoi  // Giá trị mới của Tịnh tài
+    };
+
+    // Thay đổi chữ trên nút thành "Đang tịnh tài"
+    document.getElementById('tinhTaiButton').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang tịnh tài';
+
+    // Gửi request lên Google Apps Script
+    $.ajax({
+        type: "POST",
+        url: AppsScriptLink,  // Thay bằng link Google Apps Script
+        data: formData,
+        success: function(response) {
+            // Cập nhật chữ trên nút thành "Đã tịnh tài"
+            document.getElementById('tinhTaiButton').innerHTML = 'Đã tịnh tài';
+            alert("Cập nhật thành công: " + tinhTaiMoi);
+        },
+        error: function(error) {
+            // Nếu có lỗi, thông báo và giữ trạng thái ban đầu cho nút
+            document.getElementById('tinhTaiButton').innerHTML = 'Tịnh tài';
+            alert("Lỗi khi cập nhật: " + JSON.stringify(error));
+        }
+    });
 }
 
 function editStatusPrint(listMaSo) {
