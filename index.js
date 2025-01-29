@@ -627,6 +627,11 @@ $(document).ready(function () {
         }
     });
 
+    $(document).ready(function() {
+        $('#tinhTaiButton').hide();
+        $('#goiCungButton').hide();
+    });
+
     function Search(pNo = "") {
         var no = $('#ma_so').val();
         if (pNo != "") no = pNo;
@@ -669,7 +674,9 @@ $(document).ready(function () {
                             document.getElementsByName("nguoi_sanh")[i].value = value[11];
                         }
                         i = i + 1;
-                        console.log(value[12] + "," + value[13]);
+                        // Để hiển thị lại các nút
+                        $('#tinhTaiButton').show();
+                        $('#goiCungButton').show();
                         // Kiểm tra giá trị của value[12] và value[13] để thay đổi chữ nút Tịnh tài
                         if (value[12] !== "" && value[12] !== null) {
                             // Nếu value[12] có giá trị, thay đổi chữ nút Tịnh tài thành giá trị của value[12]
@@ -743,6 +750,9 @@ $(document).ready(function () {
                 submitButton.prop("disabled", false);
                 messageContainer.removeClass("d-none");
                 $("#createNewButton, #printButton").show();
+                // Để hiển thị lại các nút
+                $('#tinhTaiButton').show();
+                $('#goiCungButton').show();
             
                 // setTimeout(function () {
                 //     messageContainer.addClass("d-none");
