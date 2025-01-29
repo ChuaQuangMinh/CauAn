@@ -221,8 +221,10 @@
           // Kiểm tra tinhTai hợp lệ (không null, không undefined, không chuỗi rỗng, là số dương)
           if (tinhTai != null && tinhTai !== "" && !isNaN(tinhTai) && Number(tinhTai) > 0) {
               $row.find(".tinh_tai").text(tinhTai + "k").css("color", "green");
+          } else if (tinhTai === "Chưa Tịnh Tài"){
+              $row.find(".tinh_tai").text("Chưa Tịnh Tài").css("color", "red");
           } else {
-              $row.find(".tinh_tai").text("");  // Xóa nội dung nếu không có giá trị hợp lệ
+            $row.find(".tinh_tai").text("");
           }
           var goiCung = value.goiCung;
           $row.find(".goi_cung").text(goiCung).css("color", "green");
