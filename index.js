@@ -1401,16 +1401,30 @@ function generatePDF(listMaSo) {
         var headers = ['', '', '', '', '', '', '', '', '', '', ''];
 
         var dataPerPageFirst = 15; // Số dòng ở trang đầu
-        var dataPerPageRest = 15;  // Số dòng ở các trang sau
+        var dataPerPageRest = 17;  // Số dòng ở các trang sau
         var datas = [];
 
         // Tách dữ liệu cho từng trang
-        for (var i = 0; i < data.length; i += dataPerPageFirst) {
-            var isFirstPage = (i === 0);
-            var subData = data.slice(i, i + (isFirstPage ? dataPerPageFirst : dataPerPageRest));
-            var rowCount = data.length;
-            datas.push(subData);
+        // for (var i = 0; i < data.length; i += dataPerPageFirst) {
+        //     var isFirstPage = (i === 0);
+        //     var subData = data.slice(i, i + (isFirstPage ? dataPerPageFirst : dataPerPageRest));
+        //     var rowCount = data.length;
+        //     datas.push(subData);
+        // }
+
+        var i = 0;
+        while (i < data.length) {
+            if (datas.length === 0) { 
+                // Trang đầu tiên
+                datas.push(data.slice(i, i + dataPerPageFirst));
+                i += dataPerPageFirst;
+            } else { 
+                // Các trang tiếp theo
+                datas.push(data.slice(i, i + dataPerPageRest));
+                i += dataPerPageRest;
+            }
         }
+
 
         // Vẽ dữ liệu cho từng trang
         for (page; page < datas.length; page++) {
