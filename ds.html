@@ -162,10 +162,6 @@
                 <!-- <button class="btn btn-sm btn-secondary check-button mb-1" data-ma-so="your_ma_so_here">
                   <i class="bi bi-check"></i>
                 </button> -->
-                <button type="button" class="btn btn-warning" id="tinhTaiButton" onclick="tinhTaiButtonClick()">
-                  <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                  Tịnh tài
-                </button>
               </td>              
             </tr>
           </tbody>
@@ -259,6 +255,59 @@
           var editButton = `<a href="${maSoEditLink}" class="btn btn-sm btn-primary mb-1 edit-button"><i class="bi bi-eye"></i></a>`;
           $row.find(".custom-td").append(editButton);
 
+          var $tinhTaiButton = $('<button class="btn btn-sm btn-warning mb-1 tinh-tai-button"><i class="bi bi-cash"></i></button>');
+          $tinhTaiButton.on("click", function () {
+              tinhTaiButtonClickDS($(this), value); // Truyền chính nút được click vào hàm
+          });
+          $row.find(".custom-td").append($tinhTaiButton);
+
+          function tinhTaiButtonClickDS(button, value) {
+              const maSo = value.maSo;
+
+              if (!maSo) {
+                  alert("Không tìm thấy mã số!");
+                  return;
+              }
+
+              let tinhTaiMoi = prompt("Nhập số tiền tịnh tài (VD: 50, 100):");
+
+              if (!tinhTaiMoi || isNaN(tinhTaiMoi)) {
+                  alert("Vui lòng nhập một số hợp lệ!");
+                  return;
+              }
+
+              let formData = {
+                  page: "tinhTai",
+                  chua: nameChua,
+                  ma_so: maSo,
+                  tinh_tai: tinhTaiMoi
+              };
+
+              // Đổi nút thành trạng thái loading
+              button.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+
+              $.ajax({
+                  type: "POST",
+                  url: AppsScriptLink,
+                  data: formData,
+                  success: function(response) {
+                      button.html('<i class="bi bi-cash"></i>');
+                      // alert("Cập nhật thành công: " + tinhTaiMoi);
+                      // Tìm hàng (tr) chứa nút được bấm
+                      let row = button.closest("tr");
+
+                      // Cập nhật giá trị mới vào cột "tinh_tai" (thêm chữ "k" vào cuối)
+                      row.find(".tinh_tai").text(tinhTaiMoi + "k").css("color", "green");
+                  },
+                  error: function(error) {
+                      button.html('<i class="bi bi-cash"></i>');
+                      alert("Lỗi khi cập nhật: " + JSON.stringify(error));
+                  }
+              });
+          }
+
+
+
           var $printButton = $row.find("button.print-button");
           $printButton.attr("data-ma-so", value.maSo); // Set the data-ma-so attribute
           $printButton.on("click", function () {
@@ -288,6 +337,8 @@
           //     $row.find(".trang_thai").removeClass("da_in").addClass("chua_in");
           //   }
           // });
+
+
 
           // Kiểm tra trạng thái trước khi thêm nút
           if (trangThai === "R") {
