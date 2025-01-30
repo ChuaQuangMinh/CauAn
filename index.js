@@ -1063,8 +1063,9 @@ function tinhTaiButtonClick() {
         data: formData,
         success: function(response) {
             // Cập nhật chữ trên nút thành "Đã tịnh tài"
-            document.getElementById('tinhTaiButton').innerHTML = 'Đã tịnh tài';
-            alert("Cập nhật thành công: " + tinhTaiMoi);
+            // Hiển thị số tiền đã nhập kèm theo chữ 'k'
+            document.getElementById('tinhTaiButton').innerHTML = tinhTaiMoi + 'k';
+            // alert("Cập nhật thành công: " + tinhTaiMoi + "k");
         },
         error: function(error) {
             // Nếu có lỗi, thông báo và giữ trạng thái ban đầu cho nút
