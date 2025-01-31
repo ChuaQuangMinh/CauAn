@@ -143,6 +143,11 @@
                       <p class="goi_cung"></p>
                     </div>
                   </div>
+                  <div class="col-md-2">
+                    <div class="mb-0">
+                      <p class="goi_cung_tam_tai"></p>
+                    </div>
+                  </div>
                 </div>
                 <!-- Vùng hiển thị danh sách thành viên -->
                 <div class="mt-3">
@@ -227,7 +232,16 @@
             $row.find(".tinh_tai").text("");
           }
           var goiCung = value.goiCung;
-          $row.find(".goi_cung").text(goiCung).css("color", "green");
+          if (goiCung != "") {
+            $row.find(".goi_cung").text(goiCung + " Sao").css("color", "green");
+          }
+
+          var tamTai = value.tamTai;
+          if (tamTai != null && tamTai !== "" && !isNaN(tamTai) && Number(tamTai) >= 0) {
+            $row.find(".goi_cung_tam_tai").text(tamTai + "k (Tam Tai)").css("color", "green");
+          } else {
+            $row.find(".goi_cung_tam_tai").text("");
+          }
 
           // Hiển thị danh sách thành viên
           var memberList = $row.find(".thanh_vien");

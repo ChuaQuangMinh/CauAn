@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbxMJOglVaoI6u04Y0y0QYK3qpsh_iaD3ML9f3Tx7sp8jQQKha9zDLl6eCK-M-6ProCtEQ/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbz0_o-5dphW19YC-hlWafyMlUCYXWx8OEeolaB2UDRDyUkce7C_np_tRmFYIrpfgpZyEw/exec";
 
 function loadJSON(file, callback) {
     var xobj = new XMLHttpRequest();
@@ -630,6 +630,7 @@ $(document).ready(function () {
     $(document).ready(function() {
         $('#tinhTaiButton').hide();
         $('#goiCungButton').hide();
+        $('#goiCungTamTaiButton').hide();
     });
 
     function Search(pNo = "") {
@@ -677,6 +678,7 @@ $(document).ready(function () {
                         // Để hiển thị lại các nút
                         $('#tinhTaiButton').show();
                         $('#goiCungButton').show();
+                        $('#goiCungTamTaiButton').show();
                         // Kiểm tra giá trị của value[12] và value[13] để thay đổi chữ nút Tịnh tài
                         if (value[12] !== "" && value[12] !== null) {
                             // Nếu value[12] có giá trị, thay đổi chữ nút Tịnh tài thành giá trị của value[12]
@@ -684,7 +686,11 @@ $(document).ready(function () {
                         }
                         if (value[13] === "Gởi Cúng") {
                             // Nếu value[13] có giá trị, thay đổi chữ nút Tịnh tài thành "Đã gởi cúng"
-                            document.getElementById("goiCungButton").innerText = "Đã gởi cúng";
+                            document.getElementById("goiCungButton").innerText = "Đã gởi cúng Sao";
+                        }
+                        if (value[14] !== "") {
+                            // Nếu value[14] có giá trị, thay đổi chữ nút Tịnh tài thành giá trị của value[14]
+                            document.getElementById("goiCungTamTaiButton").innerText = value[14] + "k (Tam Tai)";
                         }
                     });
                 }
@@ -753,6 +759,7 @@ $(document).ready(function () {
                 // Để hiển thị lại các nút
                 $('#tinhTaiButton').show();
                 $('#goiCungButton').show();
+                $('#goiCungTamTaiButton').show();
             
                 // setTimeout(function () {
                 //     messageContainer.addClass("d-none");
@@ -1017,10 +1024,10 @@ function goiCungButtonClick() {
     
         if (response.status == "SUCCESS") {
             alert("Cập nhật thành công: " + response.message);
-            document.getElementById('goiCungButton').innerHTML = 'Đã gởi cúng';
+            document.getElementById('goiCungButton').innerHTML = 'Đã gởi cúng Sao';
         } else {
             alert("Không thành công: " + response.message);
-            document.getElementById('goiCungButton').innerHTML = 'Gởi cúng';
+            document.getElementById('goiCungButton').innerHTML = 'Gởi cúng Sao';
         }
     }).fail(function (error) {
         console.log(error);  // Kiểm tra lỗi nếu có sự cố trong việc gọi API
@@ -1070,6 +1077,52 @@ function tinhTaiButtonClick() {
         error: function(error) {
             // Nếu có lỗi, thông báo và giữ trạng thái ban đầu cho nút
             document.getElementById('tinhTaiButton').innerHTML = 'Tịnh tài';
+            alert("Lỗi khi cập nhật: " + JSON.stringify(error));
+        }
+    });
+}
+
+function goiCungTamTaiButtonClick() {
+    const maSo = document.getElementById('ma_so').value;
+    
+    // Kiểm tra nếu không có mã số
+    if (!maSo) {
+        alert("Không tìm thấy mã số!");
+        return;
+    }
+
+    let tinhTaiMoi = prompt("Nhập số tiền gởi cúng Tam Tai (VD: 50, 100):");
+    
+    // Kiểm tra nếu người dùng không nhập số
+    if (!tinhTaiMoi || isNaN(tinhTaiMoi)) {
+        alert("Vui lòng nhập một số hợp lệ!");
+        return;
+    }
+
+    let formData = {
+        page: "tamTai",  // Xác định loại request
+        chua: nameChua,  // Biến nameChua chứa tên sheet
+        ma_so: maSo,  // Mã số cần cập nhật
+        tinh_tai: tinhTaiMoi  // Giá trị mới của Tịnh tài
+    };
+
+    // Thay đổi chữ trên nút thành "Đang tịnh tài"
+    document.getElementById('goiCungTamTaiButton').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang gởi cúng';
+
+    // Gửi request lên Google Apps Script
+    $.ajax({
+        type: "POST",
+        url: AppsScriptLink,  // Thay bằng link Google Apps Script
+        data: formData,
+        success: function(response) {
+            // Cập nhật chữ trên nút thành "Đã tịnh tài"
+            // Hiển thị số tiền đã nhập kèm theo chữ 'k'
+            document.getElementById('goiCungTamTaiButton').innerHTML = tinhTaiMoi + 'k (Tam Tai)';
+            // alert("Cập nhật thành công: " + tinhTaiMoi + "k");
+        },
+        error: function(error) {
+            // Nếu có lỗi, thông báo và giữ trạng thái ban đầu cho nút
+            document.getElementById('goiCungTamTaiButton').innerHTML = 'Gởi cúng Tam Tai';
             alert("Lỗi khi cập nhật: " + JSON.stringify(error));
         }
     });
