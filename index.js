@@ -1479,7 +1479,7 @@ function generatePDF(listMaSo) {
                         10: { cellWidth: 20 },
                     }
                     : { // Cấu hình cho trang chẵn
-                        0: { cellWidth: 11.5, textColor: [255, 255, 255] },
+                        0: { cellWidth: 11, textColor: [255, 255, 255] },
                         1: { cellWidth: 65 },
                         2: { cellWidth: 34 },
                         3: { cellWidth: 13 },
