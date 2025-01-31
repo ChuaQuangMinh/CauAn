@@ -1391,6 +1391,30 @@ function generatePDF(listMaSo) {
         doc.setTextColor(0, 0, 0);
         doc.text(211, 50, "25 Ất Tỵ");
 
+        // // Dòng 1: Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng 8 Tháng Giêng, Cúng Tại Chùa
+        // doc.setTextColor(32, 90, 167); // Màu đen
+        // doc.text(93, 190, 'Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng');
+        // doc.setTextColor(255, 0, 0); // Màu đỏ cho số 8
+        // doc.text(195, 190, '8');
+        // doc.setTextColor(32, 90, 167); // Màu đen
+        // doc.text(199, 190, 'Tháng Giêng, Cúng Tại Chùa');
+        
+        // // Dòng 2: Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày 20 Tháng Giêng, Cúng Tại Chùa
+        // doc.setTextColor(32, 90, 167); // Màu đen
+        // doc.text(94, 196, 'Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày');
+        // doc.setTextColor(255, 0, 0); // Màu đỏ cho số 20
+        // doc.text(191, 196, '20');
+        // doc.setTextColor(32, 90, 167); // Màu đen
+        // doc.text(197, 196, 'Tháng Giêng, Cúng Tại Chùa');
+        
+        // // Dòng 3: Cúng Sao Nặng Vào Buổi Tối Ngày 14 Hàng Tháng, Cúng Tại Chùa
+        // doc.setTextColor(32, 90, 167); // Màu đen
+        // doc.text(108, 202, 'Cúng Sao Nặng Vào Buổi Tối Ngày');
+        // doc.setTextColor(255, 0, 0); // Màu đỏ cho số 14
+        // doc.text(178, 202, '14');
+        // doc.setTextColor(32, 90, 167); // Màu đen
+        // doc.text(184, 202, 'Hàng Tháng, Cúng Tại Chùa');
+
         //set main
         doc.setFont('Tinos', 'B');
         doc.setTextColor(255, 255, 255);
