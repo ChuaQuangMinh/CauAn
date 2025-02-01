@@ -1422,7 +1422,7 @@ function generatePDF(listMaSo) {
         doc.setFont('Tinos', 'I');
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0);
-        doc.text(258, 8, '    ' + maSo);
+        doc.text(258, 10, '    ' + maSo);
 
         doc.setFont('Tinos', 'B');
         doc.setFontSize(18);
@@ -1437,12 +1437,12 @@ function generatePDF(listMaSo) {
         doc.setFont('Tinos', 'I');
         doc.setFontSize(14);
         doc.setTextColor(0, 0, 0);
-        doc.text(45, 51, diaChi);
+        doc.text(45, 52, diaChi);
 
         doc.setFont('Tinos', 'BI');
         doc.setFontSize(14);
         doc.setTextColor(0, 0, 0);
-        doc.text(211, 50, "25 Ất Tỵ");
+        doc.text(209, 51.5, "25 Ất Tỵ");
 
         // // Dòng 1: Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng 8 Tháng Giêng, Cúng Tại Chùa
         // doc.setTextColor(32, 90, 167); // Màu đen
@@ -1510,7 +1510,7 @@ function generatePDF(listMaSo) {
             }
             var startY = 57;
             if (page % 2 === 0) {
-                startY = 57;
+                startY = 58;
             } else {
                 startY = 55;
             }
