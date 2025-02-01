@@ -1519,7 +1519,7 @@ function generatePDF(listMaSo) {
             // Cấu hình autoTable cho từng trang
             var columnStyles = (page % 2 === 0) 
                     ? { // Cấu hình cho trang lẻ
-                        0: { cellWidth: 9.05, textColor: [255, 255, 255] },
+                        0: { cellWidth: 7.5, textColor: [255, 255, 255] },
                         1: { cellWidth: 65 },
                         2: { cellWidth: 34 },
                         3: { cellWidth: 13 },
