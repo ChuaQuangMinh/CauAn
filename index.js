@@ -998,7 +998,7 @@ function checkTamTai(currentYear, yearOfBirth, tuoi) {
         }
     }
 
-    if (tuoi == 23 || tuoi == 31) {
+    if (tuoi == 21 || tuoi == 23 || tuoi == 31 || tuoi == 33) {
         return "Tam Tai"
     }
 
