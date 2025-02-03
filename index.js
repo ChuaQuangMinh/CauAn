@@ -126,6 +126,7 @@ if (window.location.href.includes("PhuocSon")) {
     nameChua = "ChuaQuangMinh";
 }
 
+
 console.log(nameChua); // Kiểm tra giá trị của nameChua
 
 function showSaveReminder() {
@@ -1594,6 +1595,183 @@ function generatePDF(listMaSo) {
                 }
         }
     }
+
+    function printDSPhuocSon(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year) {
+
+        doc.setFont('Tinos', 'I');
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text(258, 9, '    ' + maSo);
+
+        doc.setFont('Tinos', 'B');
+        doc.setFontSize(18);
+        doc.setTextColor(0, 0, 0);
+        doc.text(60, 43.5, nguoiDaiDien);
+
+        doc.setFont('Tinos', 'I');
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text(220, 43, soDienThoai);
+
+        doc.setFont('Tinos', 'I');
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text(45, 50, diaChi);
+
+        doc.setFont('Tinos', 'BI');
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text(209, 50, "25 Ất Tỵ");
+
+        // Dòng 1: Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng 8 Tháng Giêng, Cúng Tại Chùa
+        doc.setTextColor(32, 90, 167); // Màu đen
+        // doc.text(93, 190, 'Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng');
+        doc.text(93, 190, '                                             ');
+        doc.setTextColor(255, 0, 0); // Màu đỏ cho số 8
+        doc.text(195, 190, ' ');
+        doc.setTextColor(0, 255, 255); // Màu đen
+        // doc.text(199, 190, 'Tháng Giêng, Cúng Tại Chùa');
+        doc.setFontSize(13);
+        doc.text(239, 191.5, '                           Phuớc Sơn');
+        
+        // Dòng 2: Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày 20 Tháng Giêng, Cúng Tại Chùa
+        doc.setTextColor(32, 90, 167); // Màu đen
+        // doc.text(94, 196, 'Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày');
+        doc.text(94, 196, '                                           ');
+        doc.setFontSize(13);
+        doc.setTextColor(220, 0, 0); // Màu đen
+        // doc.setTextColor(0, 255, 255); // Màu đỏ cho số 20
+        doc.text(197, 195, '20');
+        doc.setTextColor(220, 0, 0); // Màu đen
+        doc.setFontSize(13);
+        doc.text(238, 197.5, '                           Quang Minh');
+        // doc.text(197, 196, 'Tháng Giêng, Cúng Tại Chùa');
+        
+        // Dòng 3: Cúng Sao Nặng Vào Buổi Tối Ngày 14 Hàng Tháng, Cúng Tại Chùa
+        doc.setTextColor(32, 90, 167); // Màu đen
+        // doc.text(108, 202, 'Cúng Sao Nặng Vào Buổi Tối Ngày');
+        doc.text(108, 202, '                               ');
+        doc.setTextColor(255, 0, 0); // Màu đỏ cho số 14
+        doc.text(178, 202, '  ');
+        doc.setTextColor(0, 255, 255); // Màu đen
+        // doc.text(184, 202, 'Hàng Tháng, Cúng Tại Chùa');
+        doc.setFontSize(13);
+        doc.text(224, 203.5, '                          Phước Sơn');
+
+        //set main
+        doc.setFont('Tinos', 'B');
+        doc.setTextColor(255, 255, 255);
+
+        var rowWidths = [9, 65, 34, 13, 13, 13, 31, 31, 20, 20, 20];
+
+        // var headers = ['Số', 'Họ và Tên', 'Ngươi Sanh', 'Tuổi', 'Nam', 'Nữ', 'Sao', 'Hạn', 'Nặng-nhẹ', 'Kỵ Tháng', 'Tam Tai'];
+        var headers = ['', '', '', '', '', '', '', '', '', '', ''];
+
+        var dataPerPageFirst = 15; // Số dòng ở trang đầu
+        var dataPerPageRest = 17;  // Số dòng ở các trang sau
+        var datas = [];
+
+        // Tách dữ liệu cho từng trang
+        // for (var i = 0; i < data.length; i += dataPerPageFirst) {
+        //     var isFirstPage = (i === 0);
+        //     var subData = data.slice(i, i + (isFirstPage ? dataPerPageFirst : dataPerPageRest));
+        //     var rowCount = data.length;
+        //     datas.push(subData);
+        // }
+
+        var i = 0;
+        while (i < data.length) {
+            if (datas.length === 0) { 
+                // Trang đầu tiên
+                datas.push(data.slice(i, i + dataPerPageFirst));
+                i += dataPerPageFirst;
+            } else { 
+                // Các trang tiếp theo
+                datas.push(data.slice(i, i + dataPerPageRest));
+                i += dataPerPageRest;
+            }
+        }
+
+
+        // Vẽ dữ liệu cho từng trang
+        for (page; page < datas.length; page++) {
+            if (page > 0) {
+                doc.addPage(); // Thêm trang mới cho trang thứ 2 trở đi
+            }
+            var startY = 57;
+            if (page % 2 === 0) {
+                startY = 58;
+            } else {
+                startY = 55;
+            }
+            // var startY = page === 0 ? 57 : 55; // Trang đầu bắt đầu từ 57, trang sau từ 55
+
+            // Cấu hình autoTable cho từng trang
+            var columnStyles = (page % 2 === 0) 
+                    ? { // Cấu hình cho trang lẻ
+                        0: { cellWidth: 7.5, textColor: [255, 255, 255] },
+                        1: { cellWidth: 65 },
+                        2: { cellWidth: 34 },
+                        3: { cellWidth: 13 },
+                        4: { cellWidth: 13 },
+                        5: { cellWidth: 13 },
+                        6: { cellWidth: 31 },
+                        7: { cellWidth: 31 },
+                        8: { cellWidth: 20 },
+                        9: { cellWidth: 20 },
+                        10: { cellWidth: 20 },
+                    }
+                    : { // Cấu hình cho trang chẵn
+                        0: { cellWidth: 11, textColor: [255, 255, 255] },
+                        1: { cellWidth: 65 },
+                        2: { cellWidth: 34 },
+                        3: { cellWidth: 13 },
+                        4: { cellWidth: 13 },
+                        5: { cellWidth: 13 },
+                        6: { cellWidth: 31 },
+                        7: { cellWidth: 31 },
+                        8: { cellWidth: 20 },
+                        9: { cellWidth: 20 },
+                        10: { cellWidth: 20 },
+                    };
+            
+                // Cấu hình autoTable cho từng trang
+                var autoTableOptions = {
+                    startY: startY,
+                    head: [headers],
+                    body: datas[page],
+                    theme: 'grid',
+                    headerStyles: {
+                        cellPadding: { top: 2.5, bottom: 2.5, left: 1, right: 1 },
+                        fillColor: [255, 255, 255],
+                        textColor: [255, 255, 255],
+                        halign: 'center',
+                        lineWidth: 0.5,
+                        lineColor: [255, 255, 255],
+                        fontSize: 12,
+                    },
+                    styles: {
+                        font: 'Tinos',
+                        fontStyle: 'bold',
+                        textColor: [0, 0, 0],
+                        fontSize: 14,
+                        cellPadding: { top: 1.05, bottom: 1.0, left: 0.5, right: 0.5 },
+                        fillColor: false,
+                        halign: 'center',
+                        lineWidth: 0.5,
+                        lineColor: [255, 255, 255],
+                    },
+                    columnStyles: columnStyles,
+                };
+            
+                try {
+                    doc.autoTable(autoTableOptions);
+                } catch (error) {
+                    console.error('Error:', error.message);
+                }
+        }
+    }
+
     //lấy dữ liệu
 
     var numberOfRequests = listMaSo.length;
@@ -1721,7 +1899,12 @@ function generatePDF(listMaSo) {
                     i = i + 1;
                 });
 
-                printDS(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year);
+                if (nameChua == "ChuaPhuocSon") {
+                    printDSPhuocSon(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year);
+                } else {
+                    printDS(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year);
+                }
+                
                 // printDSNewTemp(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year);
 
                 // if (page % 2 != 0) {
