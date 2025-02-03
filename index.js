@@ -78,9 +78,22 @@ function predictGenderFromName(name) {
 // Hàm xử lý khi người dùng thay đổi dữ liệu
 function handleNameChange(input) {
     var row = input.closest('tr'); // Lấy dòng chứa input đang được xét
-    var hoVaTen = row.querySelector('input[name="ho_va_ten"]').value; // Lấy giá trị Họ và tên từ input trong dòng đó
-    hoVaTen = hoVaTen.trim();
-    console.log('Giá trị Họ và tên:', hoVaTen);
+    var hoVaTenInput = row.querySelector('input[name="ho_va_ten"]'); // Lấy thẻ input
+    var hoVaTen = hoVaTenInput.value.trim(); // Lấy giá trị Họ và tên từ input và loại bỏ khoảng trắng thừa
+
+    console.log('Giá trị Họ và tên ban đầu:', hoVaTen);
+
+    // Chuyển thành chữ thường rồi viết hoa chữ cái đầu mỗi từ
+    hoVaTen = hoVaTen
+        .toLowerCase() // Chuyển toàn bộ thành chữ thường
+        .split(/\s+/) // Tách thành mảng các từ (dùng regex để loại bỏ khoảng trắng thừa)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Viết hoa chữ cái đầu mỗi từ
+        .join(' '); // Ghép lại thành chuỗi
+
+    // Cập nhật lại giá trị trong input
+    hoVaTenInput.value = hoVaTen;
+
+    console.log('Giá trị Họ và tên sau khi chuẩn hóa:', hoVaTen);
 
     // Dự đoán giới tính nếu có tên nhập vào
     if (hoVaTen) {
