@@ -1451,12 +1451,12 @@ function generatePDF(listMaSo) {
         doc.setFont('Tinos', 'I');
         doc.setFontSize(14);
         doc.setTextColor(0, 0, 0);
-        doc.text(45, 50, diaChi);
+        doc.text(45, 51, diaChi);
 
         doc.setFont('Tinos', 'BI');
         doc.setFontSize(14);
         doc.setTextColor(0, 0, 0);
-        doc.text(209, 50, "25 Ất Tỵ");
+        doc.text(209.5, 51, "25 Ất Tỵ");
 
         // // Dòng 1: Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng 8 Tháng Giêng, Cúng Tại Chùa
         // doc.setTextColor(32, 90, 167); // Màu đen
