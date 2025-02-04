@@ -34,6 +34,47 @@ function getGenderRatio(word) {
 }
 
 // Hàm dự đoán giới tính từ tên
+// function predictGenderFromName(name) {
+//     console.log('Dự đoán giới tính từ tên:', name);
+//     const words = name.toLowerCase().split(" ").slice(1); // Bỏ qua họ, chỉ phân tích tên lót và tên cuối
+//     let maleScore = 0;
+//     let femaleScore = 0;
+
+//     console.log(`Tên: ${name}`);
+//     console.log("Tách tên thành các từ (bỏ qua họ):", words);
+
+//     // Kiểm tra theo quy tắc văn hóa
+//     const firstName = words[0];
+//     const lastName = words[words.length - 1];
+
+//     // Nếu tên lót là một từ văn hóa, quyết định giới tính ngay
+//     if (culturalRules[firstName]) {
+//         console.log(`Tên lót '${firstName}' phù hợp với quy tắc văn hóa: ${culturalRules[firstName]}`);
+//         return culturalRules[firstName];
+//     }
+
+//     // Tính điểm cho các từ trong tên dựa trên tỷ lệ Nam/Nữ
+//     words.forEach(word => {
+//         const ratio = getGenderRatio(word);
+//         maleScore += ratio.male;
+//         femaleScore += ratio.female;
+//     });
+
+//     console.log(`Điểm Nam: ${maleScore.toFixed(2)}, Điểm Nữ: ${femaleScore.toFixed(2)}`);
+
+//     // Dự đoán dựa trên tỷ lệ Nam và Nữ
+//     if (maleScore > femaleScore) {
+//         console.log(`Dự đoán giới tính: Nam`);
+//         return "Nam";
+//     }
+//     if (femaleScore > maleScore) {
+//         console.log(`Dự đoán giới tính: Nữ`);
+//         return "Nữ";
+//     }
+//     console.log(`Dự đoán giới tính: Không xác định`);
+//     return "Không xác định";
+// }
+
 function predictGenderFromName(name) {
     console.log('Dự đoán giới tính từ tên:', name);
     const words = name.toLowerCase().split(" ").slice(1); // Bỏ qua họ, chỉ phân tích tên lót và tên cuối
@@ -43,21 +84,32 @@ function predictGenderFromName(name) {
     console.log(`Tên: ${name}`);
     console.log("Tách tên thành các từ (bỏ qua họ):", words);
 
+    if (words.length === 0) {
+        console.log("Không đủ thông tin để dự đoán.");
+        return "Không xác định";
+    }
+
     // Kiểm tra theo quy tắc văn hóa
     const firstName = words[0];
     const lastName = words[words.length - 1];
 
-    // Nếu tên lót là một từ văn hóa, quyết định giới tính ngay
     if (culturalRules[firstName]) {
         console.log(`Tên lót '${firstName}' phù hợp với quy tắc văn hóa: ${culturalRules[firstName]}`);
         return culturalRules[firstName];
     }
 
-    // Tính điểm cho các từ trong tên dựa trên tỷ lệ Nam/Nữ
-    words.forEach(word => {
+    // Xử lý từng từ trong tên
+    words.forEach((word, index) => {
         const ratio = getGenderRatio(word);
-        maleScore += ratio.male;
-        femaleScore += ratio.female;
+        
+        // Nếu là tên cuối cùng, tăng trọng số
+        if (word === lastName) {
+            maleScore += ratio.male * 3; // Nhân đôi trọng số
+            femaleScore += ratio.female * 3;
+        } else {
+            maleScore += ratio.male;
+            femaleScore += ratio.female;
+        }
     });
 
     console.log(`Điểm Nam: ${maleScore.toFixed(2)}, Điểm Nữ: ${femaleScore.toFixed(2)}`);
