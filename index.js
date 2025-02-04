@@ -104,8 +104,8 @@ function predictGenderFromName(name) {
         
         // Nếu là tên cuối cùng, tăng trọng số
         if (word === lastName) {
-            maleScore += ratio.male * 3; // Nhân đôi trọng số
-            femaleScore += ratio.female * 3;
+            maleScore += ratio.male * 2; // Nhân đôi trọng số
+            femaleScore += ratio.female * 2;
         } else {
             maleScore += ratio.male;
             femaleScore += ratio.female;
