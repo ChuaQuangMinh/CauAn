@@ -163,7 +163,7 @@
               <td class="custom-td">
                 <!-- <a href="" class="btn btn-sm btn-info mb-1 view-button"><i class="bi bi-eye"></i></a>
                 <a href="" class="btn btn-sm btn-primary mb-1 edit-button"><i class="bi bi-pencil"></i></a> -->
-                <!-- <button class="btn btn-sm btn-success print-button mb-1" data-ma-so="your_ma_so_here"><i class="bi bi-printer"></i></button> -->
+                <button class="btn btn-sm btn-success print-button mb-1" data-ma-so="your_ma_so_here"><i class="bi bi-printer"></i></button>
                 <!-- <button class="btn btn-sm btn-secondary check-button mb-1" data-ma-so="your_ma_so_here">
                   <i class="bi bi-check"></i>
                 </button> -->
@@ -328,6 +328,10 @@
             var maSo = $(this).data('ma-so'); // Lấy giá trị data-ma-so
             showLoadingOverlay();
             generatePDF([maSo]); // Gọi hàm generatePDF với mã số
+            tickPrint([maSo]);
+            // Cập nhật nội dung của cột "goi_cung" thành "ĐÃ BIÊN GIẤY GC Sao"
+            var $row = $(this).closest("tr");
+            $row.find(".goi_cung").text("ĐÃ BIÊN GIẤY GC Sao").css("color", "blue");
           });
           // var $checkButton = $row.find("button.check-button");
           // $checkButton.attr("data-ma-so", value.maSo); // Set the data-ma-so attribute
