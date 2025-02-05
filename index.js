@@ -1387,6 +1387,25 @@ function generatePDF(listMaSo) {
         doc.setTextColor(32, 90, 167); // Màu đen
         doc.text(184, 202, 'Hàng Tháng, Cúng Tại Chùa');
 
+        if (guiCung !== "") {
+            var centerX = 200; // Tọa độ X giữa trang (tùy theo kích thước giấy)
+            var centerY = 15;  // Vị trí Y (cao hơn các nội dung khác)
+        
+            // Vẽ khung vuông viền
+            doc.setDrawColor(0, 255, 255); // Màu viền đen
+            doc.setLineWidth(0.5);
+            doc.rect(centerX - 15, centerY - 5, 30, 10, 'S'); // Hình chữ nhật chính
+
+            doc.setLineWidth(0.7);
+            doc.rect(centerX - 16, centerY - 6, 32, 12, 'S'); // Viền ngoài lớn hơn
+        
+            // Chèn chữ "GỬI CÚNG"
+            doc.setFont('Tinos', 'B');
+            doc.setFontSize(14);
+            doc.setTextColor(0, 255, 255); // Màu đỏ để nổi bật
+            doc.text(centerX, centerY + 2, 'GỞI CÚNG', null, null, 'center');
+        }
+
 
         //set main
         doc.setFont('Tinos', 'B');
@@ -1563,7 +1582,7 @@ function generatePDF(listMaSo) {
         var headers = ['', '', '', '', '', '', '', '', '', '', ''];
 
         var dataPerPageFirst = 15; // Số dòng ở trang đầu
-        var dataPerPageRest = 17;  // Số dòng ở các trang sau
+        var dataPerPageRest = 18;  // Số dòng ở các trang sau
         var datas = [];
 
         // Tách dữ liệu cho từng trang
