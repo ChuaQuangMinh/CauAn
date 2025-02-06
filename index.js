@@ -1,4 +1,4 @@
-let AppsScriptLink = "https://script.google.com/macros/s/AKfycbwtMwwKY8mrdIqseCQ5ul6_1ytLlOe9-h1jTTMjT8fvBrJo3JeNmmG8u3lSUEJLekuj6A/exec";
+let AppsScriptLink = "https://script.google.com/macros/s/AKfycbwXHVh-D2s5xQt5AFg_6KK4JS1qYzsvIx-rfcMXJUZHewmiDqVKIXA6iTWQFdFBBsLviQ/exec";
 
 function loadJSON(file, callback) {
     var xobj = new XMLHttpRequest();
@@ -405,7 +405,7 @@ $(document).ready(function () {
     };
     const dc3Data = {
         //Huyện Cần Đước
-        "TT.Cần Đước": ["Khu 1B", "Khu 1A", "Khu 1C", "Khu 2", "Khu 3", "Khu 4", "Khu 5", "Khu 6", "Khu 7A", "Khu 7B", "Khu 8"],
+        "TT.Cần Đước": ["Khu 1B", "Khu 1A", "Khu 1C", "Khu 2", "Khu 3", "Khu 4", "Khu 5", "Khu 6", "Khu 7", "Khu 8"],
         "Xã Tân Lân": ["Khác", "Ấp Xóm Chùa", "Ấp Bà Chủ", "Ấp Nhà Thờ", "Ấp Xóm Mới", "Ấp Nhà Dài", "Ấp Ao Gòn", "Ấp Nhà Trường", "Ấp Cầu Xây", "Ấp Bình Hòa", "Ấp Bà Thoại", "Ấp Rạch Bộng"],
         "Xã Phước Tuy": ["Khác", "Ấp 1", "Ấp 2", "Ấp 3", "Ấp 4", "Ấp 5", "Ấp 6", "Ấp 7"],
         "Xã Tân Ân": ["Khác", "Ấp 2A", "Ấp 2B", "Ấp 3", "Ấp 4", "Ấp 5", "Ấp 6", "Ấp 7"],
@@ -1251,6 +1251,7 @@ function generatePDF(listMaSo) {
 
     //pdf
     const doc = new jsPDF('l', 'mm', 'a4');
+    // const doc = new jsPDF('p', 'mm', 'a5');
     var page = 0;
     //set header
 
@@ -1713,26 +1714,26 @@ function generatePDF(listMaSo) {
         doc.setTextColor(0, 0, 0);
         doc.text(209, 50, "25 Ất Tỵ");
 
-        // Dòng 1: Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng 8 Tháng Giêng, Cúng Tại Chùa
-        doc.setTextColor(32, 90, 167); // Màu đen
-        // doc.text(93, 190, 'Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng');
-        doc.text(93, 190, '                                             ');
-        doc.setTextColor(255, 0, 0); // Màu đỏ cho số 8
-        doc.text(195, 190, ' ');
-        doc.setTextColor(0, 255, 255); // Màu đen
-        // doc.text(199, 190, 'Tháng Giêng, Cúng Tại Chùa');
-        doc.setFontSize(13);
-        doc.text(239, 191.5, '                           Phuớc Sơn');
+        // // Dòng 1: Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng 8 Tháng Giêng, Cúng Tại Chùa
+        // doc.setTextColor(32, 90, 167); // Màu đen
+        // // doc.text(93, 190, 'Cúng Sao Từ 05 Giờ Chiều Đến 10 Giờ Đêm, Mùng');
+        // doc.text(93, 190, '                                             ');
+        // doc.setTextColor(255, 0, 0); // Màu đỏ cho số 8
+        // doc.text(195, 190, ' ');
+        // doc.setTextColor(0, 255, 255); // Màu đen
+        // // doc.text(199, 190, 'Tháng Giêng, Cúng Tại Chùa');
+        // doc.setFontSize(13);
+        // doc.text(239, 191.5, '                           Phuớc Sơn');
         
         // Dòng 2: Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày 20 Tháng Giêng, Cúng Tại Chùa
         doc.setTextColor(32, 90, 167); // Màu đen
         // doc.text(94, 196, 'Cúng Giải Hạn Và Tam Tai Vào Buổi Sáng Ngày');
         doc.text(94, 196, '                                           ');
         doc.setFontSize(13);
-        doc.setTextColor(220, 0, 0); // Màu đen
+        doc.setTextColor(211, 14, 43); // Màu đen
         // doc.setTextColor(0, 255, 255); // Màu đỏ cho số 20
         doc.text(197, 195, '20');
-        doc.setTextColor(220, 0, 0); // Màu đen
+        doc.setTextColor(211, 14, 43); // Màu đen
         doc.setFontSize(13);
         doc.text(238, 197.5, '                           Quang Minh');
         // doc.text(197, 196, 'Tháng Giêng, Cúng Tại Chùa');
@@ -1743,7 +1744,7 @@ function generatePDF(listMaSo) {
         doc.text(108, 202, '                               ');
         doc.setTextColor(255, 0, 0); // Màu đỏ cho số 14
         doc.text(178, 202, '  ');
-        doc.setTextColor(0, 255, 255); // Màu đen
+        doc.setTextColor(17, 20, 92); // Màu đen
         // doc.text(184, 202, 'Hàng Tháng, Cúng Tại Chùa');
         doc.setFontSize(13);
         doc.text(224, 203.5, '                          Phước Sơn');
@@ -1894,51 +1895,8 @@ function generatePDF(listMaSo) {
             hideLoadingOverlay();
             var pdfBlobUrl = doc.output('bloburl');
             window.open(pdfBlobUrl);
-
-            // var pdfBlobUrl = doc.output('bloburl');
-            // var pdfViewer = document.getElementById('pdfViewer');
-            // pdfViewer.src = pdfBlobUrl;
-
-            // pdfViewer.onload = function () {
-            //     var iframeWindow = pdfViewer.contentWindow;
-            //     var iframeDocument = iframeWindow.document;
-
-            //     // Đặt các tuỳ chọn in, ví dụ: in ngang, giấy A4
-            //     iframeDocument.body.style.transform = 'rotate(90deg)'; // In ngang
-            //     iframeDocument.body.style.width = '210mm'; // Giấy A4 - chiều rộng
-
-            //     // Kích hoạt lệnh in
-            //     iframeWindow.print();
-            // };
             return;
         }
-        // if (index >= numberOfRequests) {
-        //     printButton.attr('disabled', false);
-        //     spinner.addClass('d-none');
-        //     hideLoadingOverlay();
-        
-        //     // Xuất PDF thành Blob
-        //     var pdfBlob = doc.output('blob');
-        
-        //     // Tạo URL Blob từ nội dung PDF
-        //     var pdfURL = URL.createObjectURL(pdfBlob);
-        
-        //     // Mở PDF trong một tab mới
-        //     var newWindow = window.open(pdfURL, '_blank');
-        
-        //     // Kiểm tra nếu đang chạy trên máy tính (bao gồm macOS)
-        //     var isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
-        //                     || /Macintosh|MacIntel|MacPPC|Mac68K/i.test(navigator.userAgent);
-        
-        //     // Nếu là máy tính, hiển thị công cụ in
-        //     if (isDesktop && newWindow) {
-        //         newWindow.onload = function () {
-        //             newWindow.print(); // Kích hoạt lệnh in
-        //         };
-        //     }
-        
-        //     return;
-        // }
         
 
         var maSo = listMaSo[index];
@@ -2015,6 +1973,18 @@ function generatePDF(listMaSo) {
                 } else {
                     printDS(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year, guiCung);
                 }
+
+                // // Lọc dữ liệu chỉ lấy những dòng có giá trị "Tam Tai"
+                // data = data.filter(row => row[row.length - 1] === "Tam Tai");
+
+                // // Kiểm tra nếu có dữ liệu mới in, tránh in danh sách trống
+                // if (data.length > 0) {
+                //     if (nameChua == "ChuaPhuocSon") {
+                //         printDSPhuocSon(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year, guiCung);
+                //     } else {
+                //         printDS(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year, guiCung);
+                //     }
+                // }
                 
                 // printDSNewTemp(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year);
 
