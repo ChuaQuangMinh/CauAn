@@ -1863,6 +1863,7 @@ function generatePDF(listMaSo) {
                     styles: {
                         font: 'Tinos',
                         fontStyle: 'bold',
+                        // fontStyle: 'N',
                         textColor: [0, 0, 0],
                         fontSize: 14,
                         cellPadding: { top: 1.05, bottom: 1.0, left: 0.5, right: 0.5 },
