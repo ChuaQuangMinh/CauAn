@@ -1250,12 +1250,88 @@ function generatePDF(listMaSo) {
     jsPDF.API.events.push(['addFonts', callAddFont]);
 
     //pdf
-    const doc = new jsPDF('l', 'mm', 'a4');
+    // const doc = new jsPDF('l', 'mm', 'a4');
     // const doc = new jsPDF('p', 'mm', 'a5');
     var page = 0;
     //set header
 
+    function printDSTamTai(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year) {
+        //set main
+        doc = new jsPDF('p', 'mm', 'a4');
+        doc.setFont('Tinos', 'B');
+        doc.setTextColor(32, 90, 167);
+
+        var rowWidths = [9, 65, 34];
+
+        var headers = ['Số', 'Họ và Tên', 'Tuổi'];
+
+        var dataPerPageFirst = 15; // Số dòng ở trang đầu
+        var dataPerPageRest = 20;  // Số dòng ở các trang sau
+        var datas = [];
+
+        // Tách dữ liệu cho từng trang
+        for (var i = 0; i < data.length; i += dataPerPageFirst) {
+            var isFirstPage = (i === 0);
+            var subData = data.slice(i, i + (isFirstPage ? dataPerPageFirst : dataPerPageRest));
+            var rowCount = data.length;
+            while (subData.length < (isFirstPage ? dataPerPageFirst : dataPerPageRest)) {
+                subData.push([++rowCount, '', '']); // Thêm dòng trống nếu cần
+            }
+            datas.push(subData);
+        }
+
+        // Vẽ dữ liệu cho từng trang
+        for (page; page < datas.length; page++) {
+            if (page > 0) {
+                doc.addPage(); // Thêm trang mới cho trang thứ 2 trở đi
+            }
+
+            var startY = page === 0 ? 10 : 10; // Trang đầu bắt đầu từ 55, trang sau từ 20
+
+            var autoTableOptions = {
+                startY: startY,
+                head: [headers],
+                body: datas[page],
+                theme: 'grid',
+                headerStyles: {
+                    cellPadding: { top: 2.5, bottom: 2.5, left: 1, right: 1 },
+                    fillColor: [255, 255, 255],
+                    textColor: [32, 90, 167],
+                    halign: 'center',
+                    lineWidth: 0.2,
+                    lineColor: [32, 90, 167],
+                    fontSize: 12,
+                },
+                styles: {
+                    font: 'Tinos',
+                    fontStyle: 'bold',
+                    textColor: [0, 0, 0],
+                    fontSize: 14,
+                    cellPadding: { top: 1.15, bottom: 1.15, left: 0.5, right: 0.5 },
+                    fillColor: false,
+                    halign: 'center',
+                    lineWidth: 0.2,
+                    lineColor: [32, 90, 167],
+                },
+                columnStyles: {
+                    0: { cellWidth: 9, textColor: [32, 90, 167] },
+                    1: { cellWidth: 65 },
+                    2: { cellWidth: 34 },
+                    3: { cellWidth: 13 },
+                },
+            };
+
+            try {
+                doc.autoTable(autoTableOptions);
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        }
+    }
+
+
     function printDSNewTemp(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year) {
+        doc = new jsPDF('l', 'mm', 'a4');
         // let maSo = "240001";
         // let nguoiDaiDien = "Nguyễn Văn A";
         // let soDienThoai = "0968123456";
@@ -1504,6 +1580,7 @@ function generatePDF(listMaSo) {
 
 
     function printDS(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year, guiCung) {
+        doc = new jsPDF('l', 'mm', 'a4');
 
         doc.setFont('Tinos', 'I');
         doc.setFontSize(12);
@@ -1688,6 +1765,7 @@ function generatePDF(listMaSo) {
     }
 
     function printDSPhuocSon(data, maSo, nguoiDaiDien, soDienThoai, diaChi, year, guiCung) {
+        doc = new jsPDF('l', 'mm', 'a4');
 
         doc.setFont('Tinos', 'I');
         doc.setFontSize(12);
